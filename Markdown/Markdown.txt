@@ -32,6 +32,9 @@
 인용 (왼쪽에 세로 바)
 > 문자 
 
+이미
+![Alt text](/path/to/img.jpg)
+
 
 마크다운 테스트 사이트
 https://pandao.github.io/editor.md/index.html
