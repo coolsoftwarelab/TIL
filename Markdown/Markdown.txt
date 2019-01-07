@@ -36,6 +36,9 @@
 이미지
 ![Alt text](/path/to/img.jpg)
 
+링크
+[설명](주소)
+
 
 마크다운 테스트 사이트
 https://pandao.github.io/editor.md/index.html
