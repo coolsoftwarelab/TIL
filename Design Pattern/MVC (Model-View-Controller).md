@@ -11,5 +11,10 @@
 ### Controller
 > 뷰와 모델 간 상호작용을 담당
 
-
+##### 구조도
 ![mvc](./image/mvc.png)
+
+---
+
+##### Source
+[https://github.com/coolsoftwarelab/DesignPattern/tree/master/MVC](https://github.com/coolsoftwarelab/DesignPattern/tree/master/MVC)
