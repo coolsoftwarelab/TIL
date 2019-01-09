@@ -1,18 +1,18 @@
 # Android MVP
 
-### ¸ğµ¨ (Model)
-> µ¥ÀÌÅÍ + »óÅÂ + ºñÁî´Ï½º ·ÎÁ÷
+### ëª¨ë¸ (Model)
+> ë°ì´í„° + ìƒíƒœ + ë¹„ì¦ˆë‹ˆìŠ¤ ë¡œì§
 
 ### View
-> UI. ºä´Â ¸ğµ¨ÀÇ Ç¥Çö. 
+> UI. ë·°ëŠ” ëª¨ë¸ì˜ í‘œí˜„. 
 
 ### Controller
-> ºä¿Í ¸ğµ¨ °£ »óÈ£ ÀÛ¿ëÀ» ´ã´ç.  ºä¿¡ ¿¬°áµÇ´Â °ÍÀÌ ¾Æ´Ï¶ó ÀÎÅÍÆäÀÌ½º·Î ¿¬°á
+> ë·°ì™€ ëª¨ë¸ ê°„ ìƒí˜¸ ì‘ìš©ì„ ë‹´ë‹¹.  ë·°ì— ì—°ê²°ë˜ëŠ” ê²ƒì´ ì•„ë‹ˆë¼ ì¸í„°í˜ì´ìŠ¤ë¡œ ì—°ê²°
 
-##### ±¸Á¶µµ
+##### êµ¬ì¡°ë„
 ![mvp](./image/mvp.png)
 
----
+------
 
 ##### Source
 [https://github.com/coolsoftwarelab/DesignPattern/tree/master/MVP](https://github.com/coolsoftwarelab/DesignPattern/tree/master/MVP)
