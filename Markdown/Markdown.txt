@@ -40,5 +40,9 @@
 [설명](주소)
 
 
+코드
+<pre><code>This is code.</code></pre>
+
+
 마크다운 테스트 사이트
 https://pandao.github.io/editor.md/index.html
