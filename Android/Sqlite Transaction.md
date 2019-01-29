@@ -22,7 +22,7 @@ setTransactionSuccessful() 은 commit 의 의미이며,
 **예제 코드**
 <pre><code>
 try {
-		mDB.beginTransaction();
+	mDB.beginTransaction();
         for (RankItem rankItem : rankItemList) {
             int rank = rankItem.getRank();
             String title = rankItem.getTitle();
