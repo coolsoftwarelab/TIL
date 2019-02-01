@@ -166,7 +166,7 @@ ReactiveX를 지원하는 언어 별 구현체들은 다양한 연산자들을 �
 **filter 마블다이어그램 (marble diagram) **
 ![](./img/rx_filter.png)
 
-###구성 요소 외 Thread 관리 기능
+### 구성 요소 외 Thread 관리 기능
 
 #### Scheduler
 >데이터를 처리하고자 하는 특정한 스레드
