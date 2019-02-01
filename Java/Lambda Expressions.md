@@ -1,10 +1,10 @@
-## ¶÷´Ù½Ä (Lambda Expressions)
-> ½Äº°ÀÚ ¾øÀÌ ½ÇÇà °¡´ÉÇÑ ÇÔ¼ö Ç¥Çö½Ä
+## ëŒë‹¤ì‹ (Lambda Expressions)
+> ì‹ë³„ì ì—†ì´ ì‹¤í–‰ ê°€ëŠ¥í•œ í•¨ìˆ˜ í‘œí˜„ì‹
 
-** ¿ä¾à **
+**ìš”ì•½**
 (x, y)->{return x+y;}
 
-** ¿¹½Ã. ÀÏ¹İÀûÀÎ ¹öÆ° Å¬¸¯ ÀÌº¥Æ® **
+**ì˜ˆì‹œ. ì¼ë°˜ì ì¸ ë²„íŠ¼ í´ë¦­ ì´ë²¤íŠ¸**
 <pre><code>mTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -12,11 +12,11 @@
             }
 });</code></pre>
 
-** ¿¹½Ã. ¶÷´Ù½Ä **
+**ì˜ˆì‹œ. ëŒë‹¤ì‹**
 
 <pre><code>mTestButton.setOnClickListener(v -> Log.d("JDEBUG", "Click!"));</code></pre>
 
-¾Èµå·ÎÀÌµå ½ºÆ©µğ¿À¿¡¼­ »ç¿ë ½Ã build.gradle ¿¡ ¾Æ·¡ ±¸¹® Ãß°¡
+ì•ˆë“œë¡œì´ë“œ ìŠ¤íŠœë””ì˜¤ì—ì„œ ì‚¬ìš© ì‹œ build.gradle ì— ì•„ë˜ êµ¬ë¬¸ ì¶”ê°€
 <pre><code>android {
 ...
 		compileOptions {
