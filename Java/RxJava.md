@@ -1,4 +1,4 @@
-﻿# RxJava
+# RxJava
 > Java에서 Reactive Programming 을 구현을 위한 라이브러리
 
 #### 구성요소
@@ -22,6 +22,26 @@ Subcriber(구독자)  가 있을 때만 동작
 
 **just 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 : **
 <pre><code>Observable<String> observable = Observable.just("1", "2", "3", "4");
+observable.subscribe(t -> Log.d(TAG, "t : " + t));
+</code></pre>
+
+**create 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 : **
+<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+            try {
+                List<String> strList = new ArrayList<>();
+                strList.add("1");
+                strList.add("2");
+                strList.add("3");
+                for (String str : strList) {
+                    emitter.onNext(str);
+                }
+                emitter.onComplete();
+            } catch (Exception e) {
+                emitter.onError(e);
+            }
+        });
+
+        observable.subscribe(t -> Log.d(TAG, "t : " + t));
 </code></pre>
 
 아래 마블 다이어그램이 어떻게 Observable과 Observable의 전환을 표현하는지 보여준다.
@@ -143,16 +163,93 @@ ReactiveX를 지원하는 언어 별 구현체들은 다양한 연산자들을 �
         });
 </code></pre>
 
-**filter 마블다이어그램 (marble diagram)  **
-![](./img/rx_filter.PNG)
+**filter 마블다이어그램 (marble diagram) **
+![](./img/rx_filter.png)
 
+###구성 요소 외 Thread 관리 기능
 
+#### Scheduler
+>데이터를 처리하고자 하는 특정한 스레드
 
+Scheduler | 용도
+----------|-----------
+Schedulers.computation( ) | 이벤트-루프와 콜백 처리 같은 연산 중심적인 작업을 위해 사용된다; 그렇기 때문에 I/O를 위한 용도로는 사용하지 말아야 한다(대신 Schedulers.io( )를 사용); 기본적으로 스레드의 수는 프로세서의 수와 같다
+Schedulers.io( ) | 블러킹 I/O의 비동기 연산 같은 I/O 바운드 작업을 처리한다. 이 스케줄러는 필요한 만큼 증가하는 스레드-풀을 통해 실행된다; 일반적인 연산이 필요한 작업은 Schedulers.computation( )를 사용하면 된다
+Schedulers.newThread( )	 | 각각의 단위 작업을 위한 새로운 스레드를 생성한다
+AndroidScheduler.mainThread() | RxAndroid 라이브러리에서 사용하는 방식으로 메인 스레드에서 동작해야하는 (UI 처리) 작업을 위해 사용
 
+#### Observable 의 연산자를 활용한 Scheduler 사용
 
+1. subscribeOn()
+Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 스레드를 지정해서 데이터 처리)
+한번만 사용하능하며, 여러 번 중첩해서 선언하는 경우 처음 정의한 스레드로 동작한다
 
+2. observeOn()
+옵저버가 어느 스케줄러 상에서 Observable을 관찰할지 명시한다 (결과를 받는 스레드)
+따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다
+subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
 
+<br>
 
+**subscribeOn( Schedulers.computation() )**
+<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+			// Schedulers.computation() : RxComputationThreadPool-1
+            ...
+        });
+		//
+		observable.subscribeOn(Schedulers.computation())
+                .subscribe(t -> {
+					// Schedulers.computation() : RxComputationThreadPool-1 
+        });
+</code></pre>
 
+<br>
+
+**subscribeOn(Schedulers.computation())**
+<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+                 Log.d(TAG, "Thread : " 
+				 + Thread.currentThread().getName());     // RxComputationThreadPool
+            ...
+        });
+		//
+	observable.subscribeOn(Schedulers.computation())
+                .subscribe(t -> {
+                 Log.d(TAG, "Thread : " 
+				 + Thread.currentThread().getName());     // RxComputationThreadPool
+        });
+</code></pre>
+
+<br>
+
+**subscribeOn(Schedulers.computation())**
+**observeOn(AndroidSchedulers.mainThread())**
+<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+			Log.d(TAG, "Thread : " 
+			+ Thread.currentThread().getName());	 // RxComputationThreadPool
+            ...
+        });
+		//
+        observable.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(t -> {
+                    Log.d(TAG, "Thread : " + Thread.currentThread().getName());	 // main
+                });
+</code></pre>
+
+<br>
+
+**Multiple observeOn**
+<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+			Log.d(TAG, "Thread : " 
+			+ Thread.currentThread().getName());	 // RxCachedThreadScheduler
+            ...
+        });
+		//
+        observable.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(t -> {
+                    Log.d(TAG, "Thread : "
+					+ Thread.currentThread().getName());	 // RxComputationThreadPool
+                });</code></pre>
 
 
