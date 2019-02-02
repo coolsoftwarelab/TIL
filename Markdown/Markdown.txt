@@ -30,7 +30,8 @@
 
 
 인용 (왼쪽에 세로 바)
-> 문자 
+> 문자 (depth 1)
+>> 문자 (depth 2)
 
 
 이미지
@@ -42,6 +43,11 @@
 
 코드
 <pre><code>This is code.</code></pre>
+
+
+인라인코드블럭
+`getSomething()`
+
 
 마크다운에서 특수문자(예약어)를 그대로 표시하고 싶은 경우 HTML Number로 표기하면된다.
 Ex) 'First:Second'
