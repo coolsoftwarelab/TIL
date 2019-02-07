@@ -254,7 +254,7 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
                 .subscribe(t -> {
                     Log.d(TAG, "Thread : "
 					+ Thread.currentThread().getName());	 // Main
-                });
-`
+                });`
+
 
 
