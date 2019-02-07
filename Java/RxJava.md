@@ -9,15 +9,15 @@
 ### Observable
 
 > 데이터 제공자. 지속적으로 흐름을 파악할 수 있는 데이터.
-Ex) 현실에서 유튜버를 **Observable** 하다 라고 할 수 있고, 유튜버를 구독하는 사람들을 **Subcriber** 라고 할 수 있다.
+Ex) 현실에서 유튜버를 **Observable** 하다 라고 할 수 있고, 유튜버를 구독하는 사람들을 **Subscriber** 라고 할 수 있다.
 
 Observable 은 두 가지 종류가 있다.
 
 - Hot Observable
-Subcriber(구독자)  가 없어도 동작
+Subscriber(구독자)  가 없어도 동작
 
 - Cold Observable
-Subcriber(구독자)  가 있을 때만 동작
+Subscriber(구독자)  가 있을 때만 동작
 
 
 **just 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 :**
