@@ -8,19 +8,19 @@
 
 ### Observable
 
-> 데이터 제공자. 지속적으로 흐름을 파악할 수 있는 데이터.
-Ex) 현실에서 유튜버를 **Observable** 하다 라고 할 수 있고, 유튜버를 구독하는 사람들을 **Subscriber** 라고 할 수 있다.
+> 데이터 제공자.<br>지속적으로 흐름을 파악할 수 있는 데이터.
+Ex) 현실에서 유튜버를 **Observable** 하다 라고 할 수 있고, 유튜버를 구독하는 사람들을 **구독자(Subscriber)** 라고 할 수 있다.
 
 Observable 은 두 가지 종류가 있다.
 
 - Hot Observable
-Subscriber(구독자)  가 없어도 동작
+구독자(Subscriber) 가 없어도 동작 (클릭 이벤트, 센서 이벤트 등)
 
 - Cold Observable
-Subscriber(구독자)  가 있을 때만 동작
+구독자(Subscriber) 가 있을 때만 동작 (웹 요청, DB쿼리 등)
 
 
-**just 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 :**
+**just 를 통해 1, 2, 3, 4 를 Emit(방출) 하는 Observable 예시 :**
 <pre><code>Observable<String> observable = Observable.just("1", "2", "3", "4");
 observable.subscribe(t -> Log.d(TAG, "t : " + t));
 </code></pre>
@@ -44,12 +44,13 @@ observable.subscribe(t -> Log.d(TAG, "t : " + t));
         observable.subscribe(t -> Log.d(TAG, "t : " + t));
 </code></pre>
 
-아래 마블 다이어그램이 어떻게 Observable과 Observable의 전환을 표현하는지 보여준다.
+아래 마블 다이어그램은 Observable과 Observable의 전환 표현한다.
 
 ![](http://reactivex.io/assets/operators/legend.png)
 
 ### Observer
->데이터 처리/데이터 수신자. 옵저버는 Observable을 구독한다. 
+>데이터 수신자.<br>
+Observer는 Observable을 구독한다. 
 Ex) 유튜브 시청자
 
 `onNext(T)`
@@ -101,11 +102,11 @@ DisposableObserver<String> disposableObserver = observable.subscribeWith(new Dis
 
 ### Operator
 > 연산자.
-ReactiveX를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공하는데, 이 중에는 공통적으로 제공되는 연산자도 있지만 반대로 특정 구현체에서만 제공하는 연산자들도 존재한다.
+Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공하는데, 이 중에는 공통적으로 제공되는 연산자도 있지만 반대로 특정 구현체에서만 제공하는 연산자들도 존재한다.
 
 **`Just`** : 객체 하나 또는 객채집합을 Observable로 변환한다. 변환된 Observable은 원본 객체들을 발행한다
 
-**just 마블다이어그램 (marble diagram) **
+**just 마블다이어그램 (marble diagram)**
 ![](http://reactivex.io/documentation/operators/images/just.c.png)
 
 **just 예제**
@@ -163,7 +164,7 @@ ReactiveX를 지원하는 언어 별 구현체들은 다양한 연산자들을 �
         });
 </code></pre>
 
-**filter 마블다이어그램 (marble diagram) **
+**filter 마블다이어그램 (marble diagram)**
 ![](./img/rx_filter.png)
 
 ### 구성 요소 외 Thread 관리 기능
@@ -173,21 +174,23 @@ ReactiveX를 지원하는 언어 별 구현체들은 다양한 연산자들을 �
 
 Scheduler | 용도
 ----------|-----------
-Schedulers.computation( ) | 이벤트-루프와 콜백 처리 같은 연산 중심적인 작업을 위해 사용된다; 그렇기 때문에 I/O를 위한 용도로는 사용하지 말아야 한다(대신 Schedulers.io( )를 사용); 기본적으로 스레드의 수는 프로세서의 수와 같다
+Schedulers.computation( ) | 이벤트-루프와 콜백 처리 같은 연산 중심적인 작업을 위해 사용된다. 그렇기 때문에 I/O를 위한 용도로는 사용하지 말아야 한다(대신 Schedulers.io( )를 사용) 기본적으로 스레드의 수는 프로세서의 수와 같다
 Schedulers.io( ) | 블러킹 I/O의 비동기 연산 같은 I/O 바운드 작업을 처리한다. 이 스케줄러는 필요한 만큼 증가하는 스레드-풀을 통해 실행된다; 일반적인 연산이 필요한 작업은 Schedulers.computation( )를 사용하면 된다
 Schedulers.newThread( )	 | 각각의 단위 작업을 위한 새로운 스레드를 생성한다
 AndroidScheduler.mainThread() | RxAndroid 라이브러리에서 사용하는 방식으로 메인 스레드에서 동작해야하는 (UI 처리) 작업을 위해 사용
 
 #### Observable 의 연산자를 활용한 Scheduler 사용
 
-1. subscribeOn()
+1. subscribeOn()<br>
 Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 스레드를 지정해서 데이터 처리)
-한번만 사용하능하며, 여러 번 중첩해서 선언하는 경우 처음 정의한 스레드로 동작한다
+한번만 사용하능하며, 여러 번 중첩해서 선언하는 경우 처음 지정한 스레드로 동작한다<br>
+데이터 전달자가 사용하는 스레드를 지정한다.
 
-2. observeOn()
+2. observeOn()<br>
 옵저버가 어느 스케줄러 상에서 Observable을 관찰할지 명시한다 (결과를 받는 스레드)
-따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다
-subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
+따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다.
+subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.<br>
+데이터 수신자가 사용하는 스레드를 지정한다.
 
 <br>
 
@@ -196,7 +199,7 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
 			// Schedulers.computation() : RxComputationThreadPool-1
             ...
         });
-		//
+		
 		observable.subscribeOn(Schedulers.computation())
                 .subscribe(t -> {
 					// Schedulers.computation() : RxComputationThreadPool-1 
@@ -211,7 +214,7 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
 				 + Thread.currentThread().getName());     // RxComputationThreadPool
             ...
         });
-		//
+		
 	observable.subscribeOn(Schedulers.computation())
                 .subscribe(t -> {
                  Log.d(TAG, "Thread : " 
@@ -228,7 +231,7 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
 			+ Thread.currentThread().getName());	 // RxComputationThreadPool
             ...
         });
-		//
+		
         observable.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(t -> {
@@ -239,17 +242,19 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
 <br>
 
 **Multiple observeOn**
-<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+```
+Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
 			Log.d(TAG, "Thread : " 
-			+ Thread.currentThread().getName());	 // RxCachedThreadScheduler
+			+ Thread.currentThread().getName());	 // RxComputationThreadPool
             ...
         });
-		//
+		 
         observable.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(t -> {
                     Log.d(TAG, "Thread : "
-					+ Thread.currentThread().getName());	 // RxComputationThreadPool
-                });</code></pre>
+					+ Thread.currentThread().getName());	 // Main
+                });
+`
 
 
