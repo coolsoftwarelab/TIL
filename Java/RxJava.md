@@ -243,19 +243,27 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
 
 <br>
 
-**Multiple observeOn**
+**Multiple scheduler test**
 ```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-			Log.d(TAG, "Thread : " 
-			+ Thread.currentThread().getName());	 // RxComputationThreadPool
+	Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+			// Schedulers.computation() : RxCachedThreadScheduler
             ...
         });
-		 
-        observable.subscribeOn(Schedulers.computation())
+	
+        observable.observeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
+                .filter(t -> {
+                    Log.d(TAG, "filter() Consumer Thread : " 
+		    	+ Thread.currentThread().getName());	// RxComputationThreadPool
+                    if (t.equals("3")) {
+                        return true;
+                    }
+                    return false;
+                })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(t -> {
-                    Log.d(TAG, "Thread : "
-					+ Thread.currentThread().getName());	 // Main
+                    Log.d(TAG, "Consumer Thread : " + Thread.currentThread().getName());	// main
+                    Log.d(TAG, "Consumer str : " + t);	// "3"
                 });
 ```
 
