@@ -20,12 +20,12 @@ Subcriber(구독자)  가 없어도 동작
 Subcriber(구독자)  가 있을 때만 동작
 
 
-**just 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 : **
+**just 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 :**
 <pre><code>Observable<String> observable = Observable.just("1", "2", "3", "4");
 observable.subscribe(t -> Log.d(TAG, "t : " + t));
 </code></pre>
 
-**create 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 : **
+**create 를 통해 1, 2, 3, 4 를 방출하는 Observable 예시 :**
 <pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
             try {
                 List<String> strList = new ArrayList<>();
