@@ -189,13 +189,13 @@ Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 �
 2. observeOn()<br>
 옵저버가 어느 스케줄러 상에서 Observable을 관찰할지 명시한다 (결과를 받는 스레드)
 따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다.
-subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.<br>
-데이터 수신자가 사용하는 스레드를 지정한다.
+subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
 
 <br>
 
 **subscribeOn( Schedulers.computation() )**
-<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+```
+Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
 			// Schedulers.computation() : RxComputationThreadPool-1
             ...
         });
@@ -204,12 +204,13 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
                 .subscribe(t -> {
 					// Schedulers.computation() : RxComputationThreadPool-1 
         });
-</code></pre>
+```
 
 <br>
 
 **subscribeOn(Schedulers.computation())**
-<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+```
+Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
                  Log.d(TAG, "Thread : " 
 				 + Thread.currentThread().getName());     // RxComputationThreadPool
             ...
@@ -220,13 +221,14 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
                  Log.d(TAG, "Thread : " 
 				 + Thread.currentThread().getName());     // RxComputationThreadPool
         });
-</code></pre>
+```
 
 <br>
 
-**subscribeOn(Schedulers.computation())**
+**subscribeOn(Schedulers.computation())**<br>
 **observeOn(AndroidSchedulers.mainThread())**
-<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
+```
+Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
 			Log.d(TAG, "Thread : " 
 			+ Thread.currentThread().getName());	 // RxComputationThreadPool
             ...
@@ -237,7 +239,7 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
                 .subscribe(t -> {
                     Log.d(TAG, "Thread : " + Thread.currentThread().getName());	 // main
                 });
-</code></pre>
+```
 
 <br>
 
@@ -254,7 +256,7 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
                 .subscribe(t -> {
                     Log.d(TAG, "Thread : "
 					+ Thread.currentThread().getName());	 // Main
-                });`
-
+                });
+```
 
 
