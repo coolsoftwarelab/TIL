@@ -208,18 +208,18 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
 
 <br>
 
-**subscribeOn(Schedulers.computation())**
+**subscribeOn(Schedulers.io())**
 ```
 Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
                  Log.d(TAG, "Thread : " 
-				 + Thread.currentThread().getName());     // RxComputationThreadPool
+				 + Thread.currentThread().getName());     // main
             ...
         });
 		
-	observable.subscribeOn(Schedulers.computation())
+	observable.subscribeOn(Schedulers.io())
                 .subscribe(t -> {
                  Log.d(TAG, "Thread : " 
-				 + Thread.currentThread().getName());     // RxComputationThreadPool
+				 + Thread.currentThread().getName());     // RxCachedThreadScheduler
         });
 ```
 
