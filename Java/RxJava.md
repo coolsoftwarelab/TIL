@@ -208,7 +208,7 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
 
 <br>
 
-**subscribeOn(Schedulers.io())**
+**observeOn(Schedulers.io())**
 ```
 Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
                  Log.d(TAG, "Thread : " 
@@ -216,7 +216,7 @@ Observable<String> observable = Observable.create((ObservableEmitter<String> emi
             ...
         });
 		
-	observable.subscribeOn(Schedulers.io())
+	observable.observeOn(Schedulers.io())
                 .subscribe(t -> {
                  Log.d(TAG, "Thread : " 
 				 + Thread.currentThread().getName());     // RxCachedThreadScheduler
