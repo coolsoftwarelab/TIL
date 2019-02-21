@@ -1,3 +1,5 @@
+### NetworkHandler
+
 ```
 public class NetworkHandler {
     private static final String TAG = NetworkHandler.class.getSimpleName();
@@ -41,4 +43,25 @@ public class NetworkHandler {
         return LazyHolder.INSTANCE;
     }
 }
+```
+
+### Usage
+```
+        RequestModel.CheckStatus reqCheckStatus = new RequestModel.CheckStatus();
+        reqCheckStatus.setId(id);
+        String param = reqCheckStatus.toJson();
+        ServerInterface serverInterface = RetrofitHandler.getInstance().getServerInterface();
+
+        Observable<ResponseModel.CheckStatus> observable = serverInterface.CheckStatus(param);
+        CheckStatusDisposable = observable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(respCheckStatus -> {
+                            	// response handling
+                            }, 
+                            e->{
+                            	// error handling
+                            },
+                            ()->{}
+                            );
+
 ```
