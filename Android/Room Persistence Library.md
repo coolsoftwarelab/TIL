@@ -1,6 +1,6 @@
 ## Room Persistence Library
 
-> Room 은 SQLite의 추상 레이어를 제공하여 SQLite의 모든 기능을 활용할 수 있다.
+> Room은 SQLite의 추상 레이어를 제공하여 SQLite의 모든 기능을 활용하면서 유려하게 데이터베이스 액세스를 할 수 있습니다.
 
 ### 구성요소
 1. Datbase<br>
