@@ -67,4 +67,6 @@ public interface UserDao {
 그림. 룸 아키텍처 다이어그램
 
 ### CRUD
-**각 작업은 메인 스레드에서 실행하지 말 것**
+**각 작업은 메인 스레드에서 실행하지 말 것
+임시로 사용하고 싶다면 allowMainThreadQueries()를 이용**
+
