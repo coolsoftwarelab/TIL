@@ -70,3 +70,22 @@ public interface UserDao {
 **각 작업은 메인 스레드에서 실행하지 말 것
 임시로 사용하고 싶다면 allowMainThreadQueries()를 이용**
 
+`build.gradle`
+```
+def room_version = "2.1.0-alpha04"
+
+implementation "androidx.room:room-runtime:$room_version"
+annotationProcessor "androidx.room:room-compiler:$room_version" // For Kotlin use kapt instead of annotationProcessor
+
+// optional - RxJava support for Room
+implementation "androidx.room:room-rxjava2:$room_version"
+
+// optional - Guava support for Room, including Optional and ListenableFuture
+implementation "androidx.room:room-guava:$room_version"
+
+// optional - Coroutines support for Room
+implementation "androidx.room:room-coroutines:$room_version"
+
+// Test helpers
+testImplementation "androidx.room:room-testing:$room_version"
+```
