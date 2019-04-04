@@ -79,7 +79,7 @@ public class RetrofitManager {
 ```
 // Server 1
 Server1Interface server1Interface = RetrofitManager.getInstance().getServer1Interface();
-Observable<ResponseModel.Data1> observable = server1Interface.sendData(param);
+Observable<ResponseModel.Data1> observable = server1Interface.getData(param);
 Disposable serv1Disposable = observable
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
@@ -92,8 +92,8 @@ Disposable serv1Disposable = observable
         );
 	
 // Server 2
-Server2Interface server2Interface = RetrofitManager.getInstance().getServer1Interface();
-Observable<ResponseModel.Data2> observable = server1Interface.sendMessage(param);
+Server2Interface server2Interface = RetrofitManager.getInstance().getServer2Interface();
+Observable<ResponseModel.Data2> observable = server2Interface.getData(param);
 Disposable serv2Disposable = observable
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
