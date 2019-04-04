@@ -1,85 +1,111 @@
-### 테스트 필요함 (2019.03.29)
+### Retrofit2 Multiple base url
 
 ```
-public class ApiClient {
-	private final static String BASE_URL = "https://simplifiedcoding.net/demos/";
-	private final static String BASE_URL2 = "http://freshcamera.herokuapp.com";
+public class RetrofitManager {
+    private static final String TAG = RetrofitManager.class.getSimpleName();
 
-	public static ApiClient apiClient;
-	private Retrofit retrofit = null;
-	private Retrofit retrofit2 = null;
+    private static HttpLoggingInterceptor logging =
+            new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
 
-	public static ApiClient getInstance() {
-		if (apiClient == null) {
-			apiClient = new ApiClient();
-		}
-		return apiClient;
-	}
+    private static class LazyHolder {
+        static final RetrofitManager INSTANCE = new RetrofitManager();
+    }
 
-	//private static Retrofit storeRetrofit = null;
+    private Server1Interface server1Interface;
+    private Server2Interface server2Interface;
 
-	public Retrofit getClient() {
-		return getClient(null);
-	}
+    public Server1Interface getServer1Interface(String url) {
+        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
+        okHttpBuilder.addInterceptor(logging);
+        okHttpBuilder.connectTimeout(15, TimeUnit.SECONDS);
+        okHttpBuilder.readTimeout(15, TimeUnit.SECONDS);
+        okHttpBuilder.writeTimeout(15, TimeUnit.SECONDS);
+        okHttpBuilder.retryOnConnectionFailure(true);
+        OkHttpClient okHttpClient = okHttpBuilder.build();
 
-	public Retrofit getClient2() {
-		return getClient2(null);
-	}
+        server1Interface = new Retrofit.Builder()
+                .baseUrl(url)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build()
+                .create(Server1Interface.class);
+        return server1Interface;
+    }
 
+    public Server2Interface getServer2Interface(String url) {
+        OkHttpClient.Builder okHttpBuilder = new OkHttpClient.Builder();
+        okHttpBuilder.addInterceptor(logging);
+        okHttpBuilder.connectTimeout(30, TimeUnit.SECONDS);
+        okHttpBuilder.readTimeout(30, TimeUnit.SECONDS);
+        okHttpBuilder.writeTimeout(30, TimeUnit.SECONDS);
+        okHttpBuilder.retryOnConnectionFailure(true);
+        OkHttpClient okHttpClient = okHttpBuilder.build();
 
-	private Retrofit getClient(final Context context) {
+        server2Interface = new Retrofit.Builder()
+                .baseUrl(url)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(okHttpClient)
+                .build()
+                .create(Server2Interface.class);
+        return server2Interface;
+    }
 
-		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-		OkHttpClient.Builder client = new OkHttpClient.Builder();
-		client.readTimeout(60, TimeUnit.SECONDS);
-		client.writeTimeout(60, TimeUnit.SECONDS);
-		client.connectTimeout(60, TimeUnit.SECONDS);
-		client.addInterceptor(interceptor);
-		client.addInterceptor(new Interceptor() {
-			@Override
-			public okhttp3.Response intercept(Chain chain) throws IOException {
-				Request request = chain.request();
-
-				return chain.proceed(request);
-			}
-		});
-
-		retrofit = new Retrofit.Builder()
-			.baseUrl(BASE_URL)
-			.client(client.build())
-			.addConverterFactory(GsonConverterFactory.create())
-			.build();
-
-
-		return retrofit;
-	}
-	private Retrofit getClient2(final Context context) {
-
-		HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-		interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-		OkHttpClient.Builder client = new OkHttpClient.Builder();
-		client.readTimeout(60, TimeUnit.SECONDS);
-		client.writeTimeout(60, TimeUnit.SECONDS);
-		client.connectTimeout(60, TimeUnit.SECONDS);
-		client.addInterceptor(interceptor);
-		client.addInterceptor(new Interceptor() {
-			@Override
-			public okhttp3.Response intercept(Chain chain) throws IOException {
-				Request request = chain.request();
-
-				return chain.proceed(request);
-			}
-		});
-
-		retrofit = new Retrofit.Builder()
-			.baseUrl(BASE_URL2)
-			.client(client.build())
-			.addConverterFactory(GsonConverterFactory.create())
-			.build();
-
-
-		return retrofit;
-	}
+    public static RetrofitManager getInstance() {
+        return LazyHolder.INSTANCE;
+    }
 }
 ```
+
+### Server1Interface
+
+```
+    @POST("/a/alpha")
+    Observable<ResponseModel.Serv1Model> getData(@Body String body);
+}
+```
+
+### Server2Interface
+
+```
+    @POST("/b/bravo")
+    Observable<ResponseModel.Serv2Model> getData(@Body String body);
+}
+```
+
+### USAGE
+
+```
+// Server 1
+Server1Interface server1Interface = RetrofitManager.getInstance().getServer1Interface();
+Observable<ResponseModel.Data1> observable = server1Interface.sendData(param);
+Disposable serv1Disposable = observable
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(resp -> {
+                    // response handling
+                },
+                e -> {
+                    // error handling
+                }
+        );
+	
+// Server 2
+Server2Interface server2Interface = RetrofitManager.getInstance().getServer1Interface();
+Observable<ResponseModel.Data2> observable = server1Interface.sendMessage(param);
+Disposable serv2Disposable = observable
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(resp -> {
+                    // response handling
+                },
+                e -> {
+                    // error handling
+                }
+        );
+```
+
+
+
+
