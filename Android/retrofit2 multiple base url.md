@@ -1,5 +1,6 @@
-### Retrofit2 Multiple base url
+## Retrofit2 Multiple base url
 
+### RetrofitManager
 ```
 public class RetrofitManager {
     private static final String TAG = RetrofitManager.class.getSimpleName();
@@ -105,7 +106,3 @@ Disposable serv2Disposable = observable
                 }
         );
 ```
-
-
-
-
