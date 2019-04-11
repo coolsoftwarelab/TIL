@@ -1,5 +1,5 @@
 
-# 의존성 주입 (DI : Dependency Injection)
+# 1. 의존성 주입 (DI : Dependency Injection)
 
 
 
@@ -85,7 +85,7 @@
 
 
 
-# 제어의 역전 (IoC : Inversion of Control)
+# 2. 제어의 역전 (IoC : Inversion of Control)
 
 
 
