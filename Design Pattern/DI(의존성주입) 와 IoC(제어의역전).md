@@ -15,7 +15,7 @@
 
 
 
-일반적인 경우 A<- - -B (B는 A에 의존성이 있다.)
+일반적인 경우 A<- - -B (A는 B에 의존성이 있다.)
 
     class A {
         public void doSomthing() {
