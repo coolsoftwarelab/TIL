@@ -1,3 +1,4 @@
+## To 부정사 (to infinitive)
 『~ 는 것』을 영어로 →  [ to ]
 
 to 뒤에 나오는 동사의 특징
@@ -51,14 +52,12 @@ to 부정사의 영어 표현 → to infinitive
 
 Ex) To excise everyday is Important. (강조된 주어)
  
-  ≫ Excising everyday is important. (평범한 문장)
+≫ Excising everyday is important. (평범한 문장)
  
-  ☞ 두 문장의 해석은 같으나 의미상 구별됨
-
-
- 
- 문법적으로 [동명사]라고 명명
- 이유 ▶ 동사를 명사로 바꿔주기 때문에
+☞ 두 문장의 해석은 같으나 의미상 구별됨
+  
+문법적으로 [동명사]라고 명명
+이유 ▶ 동사를 명사로 바꿔주기 때문에
 
 
 
