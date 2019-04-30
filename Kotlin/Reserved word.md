@@ -31,6 +31,7 @@ Companion obejct called
 ```
 
 `internal`
+같은 모듈 안에서 접근할 수 있다
 
 `lateinit`
 
@@ -39,3 +40,5 @@ Companion obejct called
 `property`
 
 `data class`
+
+`inline`
