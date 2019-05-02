@@ -14,12 +14,11 @@ To부정사/동명사가 주어인 경우
 가주어 it의 탄생
 
 ### 연 습 문 제
-(1) to부정사 To have dinner in the restaurant is expensive.
+(1) to부정사 To have dinner in the restaurant / is expensive.
 
-   └---------------------------------------┘ └-----------┘
-   
-                (주어)                     (동사)     
-                   
+                  주어                              동사
+
+
 ▶동명사 Having dinner in the restaurant is expensive. 
 
 ▶가주어 it It is expensive to have dinner in the restaurant.
