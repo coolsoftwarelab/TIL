@@ -1,3 +1,5 @@
+## 가주어 'It'을 쓰는 숨은이유 2가지.md
+
 To부정사/동명사가 주어인 경우
 
  ≫ 주어가 너무 길다. 
@@ -10,3 +12,14 @@ To부정사/동명사가 주어인 경우
            ▼ 
            
 가주어 it의 탄생
+
+### 연 습 문 제
+(1) to부정사 To have dinner in the restaurant is expensive.
+
+   └---------------------------------------┘ └-----------┘
+   
+                (주어)                     (동사)     
+                   
+▶동명사 Having dinner in the restaurant is expensive. 
+
+▶가주어 it It is expensive to have dinner in the restaurant.
