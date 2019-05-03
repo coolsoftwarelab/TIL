@@ -34,6 +34,18 @@ Companion obejct called
 같은 모듈 안에서 접근할 수 있다
 
 `lateinit`
+>lateinit은 이 프로퍼티는 절대로 Null이 될 수 없는 프로퍼티인데 초기화를 선언과 동시에 해줄 수 없거나 성능이나 기타 다른 조건들로 인해 최대한 초기화를 미뤄야 할 때
+
+```
+- var(mutable) 프로퍼티만 사용 가능
+- non-null 프로퍼티만 사용 가능
+- 커스텀 getter/setter가 없는 프로퍼티만 사용 가능
+- primitive type 프로퍼티는 사용 불가능
+- 클래스 생성자에서 사용 불가능
+- 로컬 변수로 사용 불가능
+```
+
+`lazy`
 
 `use`
 
