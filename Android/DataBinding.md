@@ -40,6 +40,9 @@ android {
 ```
 
 [src]
+
+- Activity
+
 ```
 @Override
 protected void onCreate(Bundle savedInstanceState) {
@@ -56,5 +59,16 @@ public void onButtonClick(View view) {
             // hello
             break;
     }
+}
+```
+
+- Fragment
+
+```
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    FragmentVerifySignBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_verify_sign, container, false);
+    View view = binding.getRoot();
+    return view;
 }
 ```
