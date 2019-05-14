@@ -67,8 +67,36 @@ public void onButtonClick(View view) {
 ```
 @Override
 public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    FragmentVerifySignBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_verify_sign, container, false);
+    FragmentVerifySignBinding binding = 
+                    DataBindingUtil.inflate(inflater, R.layout.fragment_verify_sign, container, false);
     View view = binding.getRoot();
     return view;
 }
 ```
+
+- Adapter
+
+```
+@Override
+public MyListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    MyRecyclerViewRowBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
+            R.layout.my_recycler_view_row, parent, false);
+    return new MyListAdapter.ViewHolder(binding);
+}
+
+@Override
+public void onBindViewHolder(final MyListAdapter.ViewHolder holder, int position) {
+    MyRecyclerViewRowBinding binding = holder.binding;
+    binding.name.setText("hello");
+}
+
+public class ViewHolder extends RecyclerView.ViewHolder {
+    private MyRecyclerViewRowBinding binding;
+
+    public ViewHolder(MyRecyclerViewRowBinding binding) {
+        super(binding.getRoot());
+        this.binding = binding;
+    }
+}
+```
+
