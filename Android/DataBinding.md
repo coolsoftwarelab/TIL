@@ -99,3 +99,59 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 }
 ```
 
+### UI 자동 업데이트
+
+데이터 바인딩에 임의의 POJO(plain old Java object)를 사용할 수 있지만, POJO를 수정하더라도 UI가 업데이트되지는 않는다.
+Observable 객체, Observable 필드, Observable 컬렉션이라는 세 가지 다른 데이터 변경 알림 메커니즘을 사용해야 한다.
+이러한 Observable 데이터 객체 중 하나가 UI에 바인딩되어 있고 데이터 객체의 속성이 변경되면 UI가 자동으로 업데이트 된다.
+
+```
+<TextView
+    android:id="@+id/tv1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@{user.nickName}" />
+
+
+public class User extends BaseObservable {
+    public String nickName;
+
+    @Bindable
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+        notifyPropertyChanged(BR.nickName);
+    }
+}
+
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+    User user = new User();
+    user.setNickName("hong");
+    binding.setUser(user);
+   
+    // android.os.Handler
+    handler.postDelayed(new Runnable() {        
+        @Override
+        public void run() {
+            user.setNickName("gil-dong");
+        }
+    }, 2000);
+}
+```
+
+BaseObservable 을 상속받는 대신 ObservableField 등을 사용해도 된다.
+ex) public final ObservableField<String> nickName = new ObservableField<>();
+
+
+참조 사이트 : https://developer.android.com/topic/libraries/data-binding/?hl=en
+
+
+
+
