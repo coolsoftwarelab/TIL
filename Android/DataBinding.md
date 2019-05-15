@@ -222,6 +222,7 @@ protected void onCreate(Bundle savedInstanceState) {
 <br>
 <br>
 참조 사이트
+
 https://developer.android.com/topic/libraries/data-binding/?hl=en
 http://blog.unsignedusb.com/2017/08/android-databinding-2-bindingadapter.html
 
