@@ -111,8 +111,9 @@ Observable 객체, Observable 필드, Observable 컬렉션이라는 세 가지 �
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="@{user.nickName}" />
+```
 
-
+```
 public class User extends BaseObservable {
     public String nickName;
 
@@ -126,8 +127,9 @@ public class User extends BaseObservable {
         notifyPropertyChanged(BR.nickName);
     }
 }
+```
 
-
+```
 @Override
 protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -151,14 +153,74 @@ ex) public final ObservableField<String> nickName = new ObservableField<>();
 
 ### Binding Adapter
 >BindingAdapter는 "현재 정의되지 않은 Binding Attribute를 정의하고, 그 내부 로직을 작성" 할 때 쓰인다.
+BindingAdapter는 간단하게만 생각하면 Custom View Class를 직접 정의해서 사용하기는 조금 귀찮거나 버거운 일이고, 혹은 꽤 많은 View들에 사용해야 하는데, 그때마다 Custom View Class를 정의하기는 어려울 때 사용한다고 보면 될것 같다.
 
+
+예제) Binding Adapter 를 이용해서 특정 시점에(2초뒤) 텍스트뷰에 텍스트를 노란색으로 강조(Highlight) 하는 과정<br>
+Binding Adapter 를 이용해서 텍스트뷰에 app:highlight 어트리뷰트를 정의하고 이를 user.isTextHighLight 와 연결해서
+Model(user) 가 변경됐을 때 동적으로 텍스트 뷰의 텍스트를 하이라이트
+
+```
+public class UserBindingAdapter {
+    @BindingAdapter(value = {"highlight"})
+    public static void setDisappear(TextView tv, boolean highlight) {
+        String text = tv.getText().toString();
+        if (highlight) {
+            SpannableString str = new SpannableString(text);
+            str.setSpan(new BackgroundColorSpan(Color.YELLOW), 0, str.length(), 0);
+            tv.setText(str);
+        } else {
+            tv.setText(text);
+        }
+    }
+}
 ```
 
 ```
+public class User extends BaseObservable {
+    public boolean isTextHighLight;
 
+    @Bindable
+    public boolean isTextHighLight() {
+        return isTextHighLight;
+    }
 
+    public void setTextHighLight(boolean textHighLight) {
+        isTextHighLight = textHighLight;
+        notifyPropertyChanged(BR.textHighLight);
+    }
+}
+```
 
+```
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+    mUser = new User();
+    binding.setUser(mUser);
+    
+    handler.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+            mUser.setTextHighLight(true);
+        }
+    }, 2000);
+}
+```
+
+```
+<TextView
+    android:id="@+id/tv1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="test"
+    android:textSize="25dp"
+    app:highlight="@{user.isTextHighLight}" />
+```
+<br>
+<br>
 참조 사이트
 https://developer.android.com/topic/libraries/data-binding/?hl=en
 http://blog.unsignedusb.com/2017/08/android-databinding-2-bindingadapter.html
