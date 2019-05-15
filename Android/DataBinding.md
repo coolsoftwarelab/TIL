@@ -146,11 +146,22 @@ protected void onCreate(Bundle savedInstanceState) {
 }
 ```
 
-BaseObservable 을 상속받는 대신 ObservableField 등을 사용해도 된다.
+BaseObservable 을 상속받는 대신 ObservableField 등을 사용해도 된다.<br>
 ex) public final ObservableField<String> nickName = new ObservableField<>();
 
+### Binding Adapter
+>BindingAdapter는 "현재 정의되지 않은 Binding Attribute를 정의하고, 그 내부 로직을 작성" 할 때 쓰인다.
 
-참조 사이트 : https://developer.android.com/topic/libraries/data-binding/?hl=en
+```
+
+```
+
+
+
+
+참조 사이트
+https://developer.android.com/topic/libraries/data-binding/?hl=en
+http://blog.unsignedusb.com/2017/08/android-databinding-2-bindingadapter.html
 
 
 
