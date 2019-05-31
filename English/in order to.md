@@ -21,15 +21,15 @@ in order to   ☞   ~~in order~~ to
 
 - ~ 하기위하여 
 
-(1) I bought a ticket to see a movie. 문법 (O)
+(1) I bought a ticket ~~to see a movie.~~ 문법 (O)
 
-(2) To see a movie, I bought a ticket. 문법 (O)
+(2) ~~To see a movie,~~ I bought a ticket. 문법 (O)
 
 - ~ 는것
 
-(3) To see a movie costs money. 문법 (X ) / 내용전달 (X)
+(3) ~~To see a movie~~ costs money. 문법 (X ) / 내용전달 (X)
 
-(4) I like to see a movie.   문법 (O) / 내용전달 (X)
+(4) I like ~~to see a movie.~~   문법 (O) / 내용전달 (X)
 
 #### 정리 2
 in order to (~하기 위하여)
