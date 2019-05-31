@@ -10,6 +10,10 @@ root set으로부터 연결되어 객체에 유효한 참조가 있으면 'reach
 root set으로부터 연결되어 있지 않으면 'unreachable'로 구별하고 가비지로 간주해 GC를 수행한다.<br>
 (unreachable 객체들끼리 참조하는 경우도 root set으로부터 연결되어 있지 않으므로 unreachable 로 판단한다.)
 
+![https://d2.naver.com/content/images/2015/06/helloworld-329631-2.png](https://d2.naver.com/content/images/2015/06/helloworld-329631-2.png)
+
+>'Reachable 객체와 Unreachable 객체' (https://d2.naver.com/helloworld/329631)
+
 ### 1. StrongReference
 유효한 참조가 있는 한 GC 대상이 되지 않는다.
 
