@@ -20,6 +20,7 @@ in order to   ☞   ~~in order~~ to
    ≫ 문법적 제약이 있다. (주어와 목적어로만 쓸 수 있다.)
 
 - ~ 하기위하여 
+
 (1) I bought a ticket to see a movie. 문법 (O)
 
 (2) To see a movie, I bought a ticket. 문법 (O)
