@@ -37,8 +37,8 @@ t = null;
 
 위에서 wr.get() 으로 얻은 객체 't' 는 StrongReference 상태이고 null 처리를 하면
 WeakReference 내부에서만 참조하는 weakly reachable 상태가 되어 GC 대상이 된다.
-
-
+<br>
+<br>
 참조 :
 https://ko.wikipedia.org/wiki/%EC%93%B0%EB%A0%88%EA%B8%B0_%EC%88%98%EC%A7%91_(%EC%BB%B4%ED%93%A8%ED%84%B0_%EA%B3%BC%ED%95%99)
 https://d2.naver.com/helloworld/329631
