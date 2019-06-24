@@ -32,3 +32,44 @@ Can I have the rooms **next to** each other -> **붙어있는** 방들을 가질
 
 **beyond** our ablility -> 우리의 능력을 **넘어서** 
 (넘는 곳의 대강의 포인트를 아는 경우는 **over** 사용)
+
+**by/till/until* noon -> 정오 **까지는**<br>
+(by:casual 한 어조, till, until:강한 어조)<br>
+until 2 o'clock 2시 5분 전에는 와있어라! 같은 강한 어조임.
+
+**around** me -> 내 **주위에**
+
+**despite** traffic(jam) -> 교통체증에도 **불구하고**
+
+**down** the street -> 그 길 **아래**
+
+**during** the vacation -> 그 방학 **동안에**<br>
+for -> 현재나 미래와 관련<br>
+during -> 과거와 관련/특정한 시간대와 관련
+
+**for** myself -> 나 자신을 **위해서**
+
+**for** 10 years -> 10년 **동안**
+
+**in** 2008 -> 2008 **년 에**
+
+**from** Kelly -> Kelly **로부터**
+
+**in** early winter -> 초 겨울**에**
+
+**in** september -> 9 월 **에**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
