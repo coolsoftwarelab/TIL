@@ -23,28 +23,38 @@ Observable 의 두 가지 종류
 Observable 예시
 
 - just 를 통해 1, 2, 3, 4 를 Emit(방출) 하는 Observable :
-<pre><code>Observable<String> observable = Observable.just("1", "2", "3", "4");
-observable.subscribe(t -> Log.d(TAG, "t : " + t));
-</code></pre>
+
+```
+Observable observable = Observable.just(1, 2, 3, 4);
+observable.subscribe(t -> System.out.println("t : " + t));
+```
 
 - create 를 통해 1, 2, 3, 4 를 방출하는 Observable :
-<pre><code>Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-            try {
-                List<String> strList = new ArrayList<>();
-                strList.add("1");
-                strList.add("2");
-                strList.add("3");
-                for (String str : strList) {
-                    emitter.onNext(str);
-                }
-                emitter.onComplete();
-            } catch (Exception e) {
-                emitter.onError(e);
-            }
-        });
+```
+Observable observable = Observable.create((ObservableOnSubscribe<String>) emitter -> {
+    try {
+//                (ObservableOnSubscribe) emitter
+//                emitter.onNext(1);
+//                emitter.onNext(2);
+//                emitter.onNext(3);
+//                emitter.onNext(4);
 
-        observable.subscribe(t -> Log.d(TAG, "t : " + t));
-</code></pre>
+	List<String> strList = new ArrayList<>();
+	strList.add("1");
+	strList.add("2");
+	strList.add("3");
+	strList.add("4");
+	for (String str : strList) {
+	    emitter.onNext(str);
+	}
+	emitter.onComplete();
+    } catch (Exception e) {
+	emitter.onError(e);
+    }
+});
+
+observable.subscribe(t -> Log.d(TAG, "t : " + t));
+```
 
 Observable과 Observable의 전환을 표현하는 마블 다이어그램
 
@@ -74,35 +84,47 @@ Observable 은 기대하는 데이터가 생성되지 않았거나 다른 이유
 >메모리 누수를 방지하기 위한 Observer 이며, Thread-Safe 하다.
 
 **DisposableObserver 예시**
-<pre><code>Observable<String> observable = Observable.just("1", "2", "3", "4");
 
-DisposableObserver<String> disposableObserver = observable.subscribeWith(new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-		// "1", "2", "3", "4"
-            }
+```
+Observable<Integer> observable = Observable.just(1, 2, 3, 4);
+Disposable d = observable.subscribeWith(new DisposableObserver<Integer>() {
+    @Override
+    protected void onStart() {
+	System.out.println("Start!");
+    }
 
-            @Override
-            public void onError(Throwable e) {
-		// error occured
-            }
+    @Override
+    public void onNext(Integer t) {
+	if (t == 3) {
+	    dispose();
+	}
+	System.out.println("t : " + t); // 3 times call (1 2 3)
+    }
 
-            @Override
-            public void onComplete() {
-		// It is called after onNext() completes. 
-            }
-        });
-</code></pre>
+    @Override
+    public void onError(Throwable e) {
+	// error occured
+    }
+
+    @Override
+    public void onComplete() {
+	// It is called after onNext() completes.
+    }
+});
+d.dispose();
+```
 
 **안드로이드에서 메모리 릭 방지 처리**
-<pre><code>    @Override
-    protected void onDestroy() {
-        if(disposableObserver != null && !disposableObserver.isDisposed()) {
-            disposableObserver.dispose();
-        }
-        super.onDestroy();
-    }
-</code></pre>
+
+```
+@Override
+protected void onDestroy() {
+	if(disposableObserver != null && !disposableObserver.isDisposed()) {
+	    disposableObserver.dispose();
+	}
+	super.onDestroy();
+}
+```
 
 ### Operator
 > 연산자<br>
