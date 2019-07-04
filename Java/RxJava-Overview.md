@@ -26,7 +26,7 @@ Observable 예시
 
 ```
 Observable observable = Observable.just(1, 2, 3, 4);
-observable.subscribe(t -> System.out.println("t : " + t));
+observable.subscribe(t -> System.out.println("t : " + t));      // 1 2 3 4
 ```
 
 - create 를 통해 1, 2, 3, 4 를 방출하는 Observable :
@@ -53,7 +53,7 @@ Observable observable = Observable.create((ObservableOnSubscribe<String>) emitte
     }
 });
 
-observable.subscribe(t -> Log.d(TAG, "t : " + t));
+observable.subscribe(t -> Log.d(TAG, "t : " + t));	// 1 2 3 4
 ```
 
 Observable과 Observable의 전환을 표현하는 마블 다이어그램
@@ -87,7 +87,8 @@ Observable 은 기대하는 데이터가 생성되지 않았거나 다른 이유
 
 ```
 Observable<Integer> observable = Observable.just(1, 2, 3, 4);
-Disposable d = observable.subscribeWith(new DisposableObserver<Integer>() {
+
+DisposableObserver<Integer> disposableObserver = new DisposableObserver<Integer>() {
     @Override
     protected void onStart() {
 	System.out.println("Start!");
@@ -110,20 +111,10 @@ Disposable d = observable.subscribeWith(new DisposableObserver<Integer>() {
     public void onComplete() {
 	// It is called after onNext() completes.
     }
-});
+};
+
+Disposable d = observable.subscribeWith(disposableObserver);
 d.dispose();
-```
-
-**안드로이드에서 메모리 릭 방지 처리**
-
-```
-@Override
-protected void onDestroy() {
-	if(disposableObserver != null && !disposableObserver.isDisposed()) {
-	    disposableObserver.dispose();
-	}
-	super.onDestroy();
-}
 ```
 
 ### Operator
