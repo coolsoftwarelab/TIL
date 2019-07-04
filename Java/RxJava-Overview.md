@@ -83,8 +83,6 @@ Observable 은 기대하는 데이터가 생성되지 않았거나 다른 이유
 #### DisposableObserver
 >메모리 누수를 방지하기 위한 Observer 이며, Thread-Safe 하다.
 
-**DisposableObserver 예시**
-
 ```
 Observable<Integer> observable = Observable.just(1, 2, 3, 4);
 
@@ -151,7 +149,8 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
 아래 예제 코드에서는 `onNext()` 에서 정수 '3' 이 전달되고 이후 `onComplete()` 가 호출된다.
 
 **filter 예제**
-<pre><code>Observable<Integer> observable2 = Observable.just(1, 2, 3, 4, 5)
+```
+Observable<Integer> observable2 = Observable.just(1, 2, 3, 4, 5)
                 .filter(new AppendOnlyLinkedArrayList.NonThrowingPredicate<Integer>() {
                     @Override
                     public boolean test(Integer value) {
@@ -166,7 +165,7 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
                 observable2.subscribeWith(new DisposableObserver<Integer>() {
             @Override
             public void onNext(Integer value) {
-		// 3
+		System.out.println("value : " + value	// 3
             }
 
             @Override
@@ -179,7 +178,7 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
 		// It is called after onNext() completes. 
             }
         });
-</code></pre>
+```
 
 **filter 마블다이어그램 (marble diagram)**<br>
 ![](./img/rx_filter.png)
@@ -213,31 +212,26 @@ subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에
 **subscribeOn(Schedulers.computation())**
 
 ```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Schedulers.computation() : RxComputationThreadPool-1
-        ...
-});
-		
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5);
+
 observable.subscribeOn(Schedulers.computation())
-	  .subscribe(t -> {
-		// Schedulers.computation() : RxComputationThreadPool-1 
-});
+	.subscribe(t -> {
+	    System.out.println("Thread : " 
+	    	+ Thread.currentThread().getName()); // RxComputationThreadPool-1
+	});
 ```
 
 <br>
 
-**observeOn(Schedulers.io())**
+**subscribeOn(Schedulers.io())**
 
 ```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Thread.currentThread().getName() == main
-	...
-});
-		
-observable.observeOn(Schedulers.io())
-          .subscribe(t -> {
-		// Thread.currentThread().getName()) == RxCachedThreadScheduler
-	   });
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5);
+
+observable.subscribeOn(Schedulers.io())
+	.subscribe(t -> {
+	    System.out.println("Thread : " + Thread.currentThread().getName()); // RxCachedThreadScheduler-1
+	});
 ```
 
 <br>
