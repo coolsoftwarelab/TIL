@@ -207,75 +207,107 @@ Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 �
 따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다.
 subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
 
+**observeOn()이 우선된다.**
+
+- subscribeOn() 선언 후 observeOn() 이 선언되면 subscribeOn()은 무시되고,
+observeOn() 이 먼저 선언되고 subscribeOn()이 선언되어도 observeOn() 으로 동작한다.
+
 <br>
 
-**subscribeOn(Schedulers.computation())**
-
+#### Scheduler를 지정하지 않았을 때
 ```
-Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5);
-
-observable.subscribeOn(Schedulers.computation())
-	.subscribe(t -> {
-	    System.out.println("Thread : " 
-	    	+ Thread.currentThread().getName()); // RxComputationThreadPool-1
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
+	.map(t -> {
+	    System.out.println("Thread in map : " 
+	    	+ Thread.currentThread().getName());  // main
+	    return t + 1;
 	});
+
+observable.subscribe(t -> {
+    System.out.println("Thread in map : " 
+    	+ Thread.currentThread().getName()); // main
+});
 ```
 
-<br>
-
-**subscribeOn(Schedulers.io())**
-
+#### subscribeOn(Schedulers.io())
 ```
-Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5);
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
+	.map(t -> {
+	    System.out.println("Thread in map : " 
+	    	+ Thread.currentThread().getName());  // RxCachedThreadScheduler-1
+	    return t + 1;
+	});
 
 observable.subscribeOn(Schedulers.io())
 	.subscribe(t -> {
-	    System.out.println("Thread : " + Thread.currentThread().getName()); // RxCachedThreadScheduler-1
+    System.out.println("Thread in subscribe : " 
+    	+ Thread.currentThread().getName()); // RxCachedThreadScheduler-1
+});
+```
+
+#### subscribeOn(Schedulers.computation())
+```
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
+	.map(t -> {
+	    System.out.println("Thread in map : " 
+	    	+ Thread.currentThread().getName());  // RxComputationThreadPool-1
+	    return t + 1;
+	});
+
+observable.subscribeOn(Schedulers.computation())
+	.subscribe(t -> {
+	    System.out.println("Thread in subscribe : " 
+	    	+ Thread.currentThread().getName()); // RxComputationThreadPool-1
+	});
+});
+```
+
+<br>
+<br>
+
+#### subscribeOn(Schedulers.computation()), observeOn(AndroidSchedulers.io())
+```
+Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
+	.map(t -> {
+	    System.out.println("Thread in map : " + Thread.currentThread().getName());  // RxComputationThreadPool-1
+	    return t + 1;
+	});
+
+observable.subscribeOn(Schedulers.computation())
+	.observeOn(Schedulers.io())
+	.subscribe(t -> {
+	    System.out.println("Thread in subscribe : " + Thread.currentThread().getName()); // RxCachedThreadScheduler-1
 	});
 ```
 
 <br>
 
-**subscribeOn(Schedulers.computation())**<br>
-
-**observeOn(AndroidSchedulers.mainThread())**
-
+### Multiple scheduler test
 ```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Thread.currentThread().getName()) == RxComputationThreadPool
-        ...
-});
-		
-observable.subscribeOn(Schedulers.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(t -> {
-		// Thread.currentThread().getName()) == main
-	   });
-```
+Observable<Integer> observable = Observable.just(0, 1, 2, 3, 4)
+	.map(t -> {
+	    System.out.println("Thread in map : " + Thread.currentThread().getName());  // RxCachedThreadScheduler-1
+	    return t + 1;
+	});
 
-<br>
-
-**Multiple scheduler test**
-
-```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Schedulers.computation() : RxCachedThreadScheduler
-        ...
-});
-	
-observable.observeOn(Schedulers.computation())
-	  .subscribeOn(Schedulers.io())
-	  .filter(t -> {
-		Log.d(TAG, "filter() Consumer Thread : " + Thread.currentThread().getName());	// RxComputationThreadPool
-		if (t.equals("3")) {
-		    return true;
-		}
-		return false;
-           })
-           .observeOn(AndroidSchedulers.mainThread())
-           .subscribe(t -> {
-                    Log.d(TAG, "Consumer Thread : " + Thread.currentThread().getName());	// main
-                    Log.d(TAG, "Consumer str : " + t);	// "3"
-           });
+observable.subscribeOn(Schedulers.io())
+	.observeOn(Schedulers.computation())
+	.reduce((a, b) -> {
+	    System.out.println("Thread in reduce : " + Thread.currentThread().getName());  // RxComputationThreadPool-1
+	    return a + b;
+	})
+	.observeOn(Schedulers.computation())
+	.filter(t -> {
+	    System.out.println("Thread in filter : " + Thread.currentThread().getName());  // RxComputationThreadPool-2
+	    if (t == 15) {
+		return true;
+	    }
+	    return false;
+	})
+	.observeOn(AndroidSchedulers.mainThread())
+	.subscribe(t -> {
+	    System.out.println("Thread in subscribe : " + Thread.currentThread().getName()); // main
+	    System.out.println("Thread in subscribe t : " + t); // 15
+	});
 ```
 
