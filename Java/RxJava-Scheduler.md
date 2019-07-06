@@ -109,7 +109,7 @@ observable.subscribeOn(Schedulers.io())
 	    System.out.println("Thread in reduce : " + Thread.currentThread().getName());  // RxComputationThreadPool-1
 	    return a + b;
 	})
-	.observeOn(Schedulers.computation())
+	.observeOn(Schedulers.io())
 	.filter(t -> {
 	    System.out.println("Thread in filter : " + Thread.currentThread().getName());  // RxCachedThreadScheduler-2
 	    if (t == 15) {
