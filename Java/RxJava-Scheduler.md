@@ -78,7 +78,7 @@ observable.subscribeOn(Schedulers.computation())
 <br>
 <br>
 
-#### subscribeOn(Schedulers.computation()), observeOn(AndroidSchedulers.io())
+#### subscribeOn(Schedulers.computation()), observeOn(Schedulers.io())
 ```
 Observable<Integer> observable = Observable.just(1, 2, 3, 4, 5)
 	.map(t -> {
