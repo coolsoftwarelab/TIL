@@ -20,11 +20,6 @@ Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 �
 따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다.
 subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
 
-**observeOn()이 우선된다.**
-
-- subscribeOn() 선언 후 observeOn() 이 선언되면 subscribeOn()은 무시되고,
-observeOn() 이 먼저 선언되고 subscribeOn()이 선언되어도 observeOn() 으로 동작한다.
-
 >SubscribeOn 연산자는 Observable이 연산을 위해 사용할 스레드를 지정하며, 연산자 체인 중 아무 곳에서 호출해도 문제되지 않는다. 하지만, ObserveOn 연산자는 연산자 체인 중 Observable이 사용할 스레드가 호출 체인 중 어느 시점에서 할당되는지에 따라 그 후에 호출되는 연산자는 영향을 받는다. 그렇기 때문에, 어쩌면 여러분은 특정 연산자를 별도의 스레드에서 실행 시키기 위해 연산자 체인 중 한 군데 이상에서ObserveOn을 호출하게 될 것이다.
 
 
