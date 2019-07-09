@@ -1,0 +1,13 @@
+### Synchronous vs Asynchronous
+
+> Synchronous / Asynchronous 는 호출되는 함수의 작업 완료 여부를 누가 신경쓰냐가 관심사다.
+
+
+### Blocking vs NonBlocking
+
+> Blocking / NonBlocking 은 호출되는 함수가 바로 리턴 하느냐 마느냐가 관심사다.
+
+
+
+<br>
+참조 : https://homoefficio.github.io/2017/02/19/Blocking-NonBlocking-Synchronous-Asynchronous/
