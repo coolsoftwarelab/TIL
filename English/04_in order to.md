@@ -6,6 +6,8 @@
 
 in order to   ☞   ~~in order~~ to 
 
+in order to 이하는 빼도 문장에 영향을 주지 않는다.
+
 #### 정리 1
 ◎ in order to (~하기 위하여)와 to (~는 것) 의 정리 
 
