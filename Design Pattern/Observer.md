@@ -4,4 +4,5 @@
 
 <br>
 <br>
-![](./image/observer_pattern.png)
+
+![ob](./image/observer_pattern.png)
