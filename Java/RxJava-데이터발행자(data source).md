@@ -30,7 +30,19 @@ Ex) 마우스 이벤트, 키보드 이벤트, 센서 데이터, 주식 가격 �
 
 **구독자가 여러 명이다** 의 의미
 
->서버에 요청한 결과로 반환된 JSON 문서를 파싱해 원하는 속성을 추출하는 상황에서 날씨 정보, 지역정보, 시간 정보를 반환하는 경우 이 세 가지 정보를 각각 구독하면 구독자가 여러 명이다 라고 할 수 있다.
+Ex 1)
+
+구독자가 둘
+
+```
+Observable observable = Observable.just(1,2,4,5);
+observable.subscribe(data -> System.out.println("subscriber #1  : " + data));
+observable.subscribe(data -> System.out.println("subscriber #2  : " + data));
+```
+
+Ex 2)
+
+서버에 요청한 결과로 반환된 JSON 문서를 파싱해 원하는 속성을 추출하는 상황에서 날씨 정보, 지역정보, 시간 정보를 반환하는 경우 이 세 가지 정보를 각각 구독하면 구독자가 여러 명이다 라고 할 수 있다.
 
 ### Single class
 
@@ -160,5 +172,38 @@ Subscriber #2 => 1
 Subscriber #2 => 3
 Subscriber #1 => 5
 Subscriber #2 => 5
+*/
+```
+
+#### Etc
+
+### ConnectableObservable class
+
+>Subject class 처럼 Cold Observable 을 Hot Observable 로 변환.<br>
+connect() 함수를 호출한 시점부터 subscribe() 함수를 호출한 구독자에게 데이터를 발행.
+
+```
+String[] dt = {"1", "3", "5"};
+Observable<String> balls = Observable.interval(100L, TimeUnit.MILLISECONDS)
+        .map(Long::intValue)
+        .map(i -> dt[i])
+        .take(dt.length);
+ConnectableObservable<String> source = balls.publish();
+source.subscribe(data -> System.out.println("Subscriber #1 => " + data));
+source.subscribe(data -> System.out.println("Subscriber #2 => " + data));
+source.connect();
+
+Thread.sleep(250);
+source.subscribe(data -> System.out.println("Subscriber #3 =>" + data));
+Thread.sleep(100);
+
+/*
+Subscriber #1 => 1
+Subscriber #2 => 1
+Subscriber #1 => 3
+Subscriber #2 => 3
+Subscriber #1 => 5
+Subscriber #2 => 5
+Subscriber #3 =>5
 */
 ```
