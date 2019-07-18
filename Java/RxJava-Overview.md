@@ -26,7 +26,7 @@ Observable 예시
 
 ```
 Observable observable = Observable.just(1, 2, 3, 4);
-observable.subscribe(t -> System.out.println("t : " + t));
+observable.subscribe(t -> System.out.println("t : " + t));      // 1 2 3 4
 ```
 
 - create 를 통해 1, 2, 3, 4 를 방출하는 Observable :
@@ -53,7 +53,7 @@ Observable observable = Observable.create((ObservableOnSubscribe<String>) emitte
     }
 });
 
-observable.subscribe(t -> Log.d(TAG, "t : " + t));
+observable.subscribe(t -> Log.d(TAG, "t : " + t));	// 1 2 3 4
 ```
 
 Observable과 Observable의 전환을 표현하는 마블 다이어그램
@@ -83,11 +83,10 @@ Observable 은 기대하는 데이터가 생성되지 않았거나 다른 이유
 #### DisposableObserver
 >메모리 누수를 방지하기 위한 Observer 이며, Thread-Safe 하다.
 
-**DisposableObserver 예시**
-
 ```
 Observable<Integer> observable = Observable.just(1, 2, 3, 4);
-Disposable d = observable.subscribeWith(new DisposableObserver<Integer>() {
+
+DisposableObserver<Integer> disposableObserver = new DisposableObserver<Integer>() {
     @Override
     protected void onStart() {
 	System.out.println("Start!");
@@ -110,20 +109,10 @@ Disposable d = observable.subscribeWith(new DisposableObserver<Integer>() {
     public void onComplete() {
 	// It is called after onNext() completes.
     }
-});
+};
+
+Disposable d = observable.subscribeWith(disposableObserver);
 d.dispose();
-```
-
-**안드로이드에서 메모리 릭 방지 처리**
-
-```
-@Override
-protected void onDestroy() {
-	if(disposableObserver != null && !disposableObserver.isDisposed()) {
-	    disposableObserver.dispose();
-	}
-	super.onDestroy();
-}
 ```
 
 ### Operator
@@ -160,7 +149,8 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
 아래 예제 코드에서는 `onNext()` 에서 정수 '3' 이 전달되고 이후 `onComplete()` 가 호출된다.
 
 **filter 예제**
-<pre><code>Observable<Integer> observable2 = Observable.just(1, 2, 3, 4, 5)
+```
+Observable<Integer> observable2 = Observable.just(1, 2, 3, 4, 5)
                 .filter(new AppendOnlyLinkedArrayList.NonThrowingPredicate<Integer>() {
                     @Override
                     public boolean test(Integer value) {
@@ -175,7 +165,7 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
                 observable2.subscribeWith(new DisposableObserver<Integer>() {
             @Override
             public void onNext(Integer value) {
-		// 3
+		System.out.println("value : " + value	// 3
             }
 
             @Override
@@ -188,109 +178,7 @@ Rx 를 지원하는 언어 별 구현체들은 다양한 연산자들을 제공�
 		// It is called after onNext() completes. 
             }
         });
-</code></pre>
+```
 
 **filter 마블다이어그램 (marble diagram)**<br>
 ![](./img/rx_filter.png)
-
-### 구성 요소 외 Thread 관리 기능
-
-#### Scheduler
->데이터를 처리하고자 하는 특정한 스레드
-
-Scheduler | 용도
-----------|-----------
-Schedulers.computation( ) | 이벤트-루프와 콜백 처리 같은 연산 중심적인 작업을 위해 사용된다. 그렇기 때문에 I/O를 위한 용도로는 사용하지 말아야 한다(대신 Schedulers.io( )를 사용) 기본적으로 스레드의 수는 프로세서의 수와 같다
-Schedulers.io( ) | 블러킹 I/O의 비동기 연산 같은 I/O 바운드 작업을 처리한다. 이 스케줄러는 필요한 만큼 증가하는 스레드-풀을 통해 실행된다; 일반적인 연산이 필요한 작업은 Schedulers.computation( )를 사용하면 된다
-Schedulers.newThread( )	 | 각각의 단위 작업을 위한 새로운 스레드를 생성한다
-AndroidScheduler.mainThread() | RxAndroid 라이브러리에서 사용하는 방식으로 메인 스레드에서 동작해야하는 (UI 처리) 작업을 위해 사용
-
-#### Observable 의 연산자를 활용한 Scheduler 사용
-
-1. subscribeOn()<br>
-Observable을 구독할 때 사용할 스케줄러를 명시한다 (특정한 스레드를 지정해서 데이터 처리)
-한번만 사용하능하며, 여러 번 중첩해서 선언하는 경우 처음 지정한 스레드로 동작한다<br>
-데이터 전달자가 사용하는 스레드를 지정한다.
-
-2. observeOn()<br>
-옵저버가 어느 스케줄러 상에서 Observable을 관찰할지 명시한다 (결과를 받는 스레드)
-따로 지정하지 않으면 subscribeOn() 에서 지정한 스레드로 동작한다.
-subscribeOn() 과 달리 observeOn() 은 여러번 호출하여 각각 연산에 대한 스레드를 달리 할 수 있다.
-
-<br>
-
-**subscribeOn(Schedulers.computation())**
-
-```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Schedulers.computation() : RxComputationThreadPool-1
-        ...
-});
-		
-observable.subscribeOn(Schedulers.computation())
-	  .subscribe(t -> {
-		// Schedulers.computation() : RxComputationThreadPool-1 
-});
-```
-
-<br>
-
-**observeOn(Schedulers.io())**
-
-```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Thread.currentThread().getName() == main
-	...
-});
-		
-observable.observeOn(Schedulers.io())
-          .subscribe(t -> {
-		// Thread.currentThread().getName()) == RxCachedThreadScheduler
-	   });
-```
-
-<br>
-
-**subscribeOn(Schedulers.computation())**<br>
-
-**observeOn(AndroidSchedulers.mainThread())**
-
-```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Thread.currentThread().getName()) == RxComputationThreadPool
-        ...
-});
-		
-observable.subscribeOn(Schedulers.computation())
-          .observeOn(AndroidSchedulers.mainThread())
-          .subscribe(t -> {
-		// Thread.currentThread().getName()) == main
-	   });
-```
-
-<br>
-
-**Multiple scheduler test**
-
-```
-Observable<String> observable = Observable.create((ObservableEmitter<String> emitter) -> {
-	// Schedulers.computation() : RxCachedThreadScheduler
-        ...
-});
-	
-observable.observeOn(Schedulers.computation())
-	  .subscribeOn(Schedulers.io())
-	  .filter(t -> {
-		Log.d(TAG, "filter() Consumer Thread : " + Thread.currentThread().getName());	// RxComputationThreadPool
-		if (t.equals("3")) {
-		    return true;
-		}
-		return false;
-           })
-           .observeOn(AndroidSchedulers.mainThread())
-           .subscribe(t -> {
-                    Log.d(TAG, "Consumer Thread : " + Thread.currentThread().getName());	// main
-                    Log.d(TAG, "Consumer str : " + t);	// "3"
-           });
-```
-
