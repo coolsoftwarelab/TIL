@@ -35,13 +35,9 @@ super.onDestroy();
 #### 2. RxLifecycle 라이브러리 이용
 
 ```
+```
 
+#### 3. CompositeDisposable
 
-
-
-
-
-
-
-
+```
 ```
