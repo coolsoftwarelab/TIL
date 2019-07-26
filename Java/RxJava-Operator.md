@@ -137,4 +137,21 @@ skipLast(2) value = 400
 */
 ```
 
+#### reduce
+
+>발행한 데이터를 모두 사용하여 최종 결과 데이터를 합성
+
+```
+String[] ballas = {"1", "3", "5"};
+Maybe<String> source = Observable.fromArray(ballas)
+        .reduce((ball1, ball2) -> ball2 + "(" + ball1 + ")");
+source.subscribe(System.out::println);
+
+/*
+5(3(1))
+*/
+```
+
+
+
 
