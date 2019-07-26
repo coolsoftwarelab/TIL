@@ -34,34 +34,107 @@ source.subscribe(System.out::println);
 `map` 은 일대일, `flatMap` 은 일대일 혹은 일대다
 
 ```
-Integer[] arr = new Integer[]{ 1, 2, 3, 4, 5 };
-Observable
-  .fromArray(arr)
-  .flatMap((Function<Integer, ObservableSource<?>>) integer -> Observable.just(integer + 10))
-  .subscribe(new DisposableObserver<Object>() {
-    @Override
-    public void onNext(Object o) {
-        Log.d("TAG", "Object o : " + o);  // 11, 12, 13, 14, 15
-    }
+String[] balls = {"1", "3", "5"};
 
-    @Override
-    public void onError(Throwable e) {
-    }
+// First way
+Observable<String> source = Observable.fromArray(balls)
+.flatMap(ball -> Observable.just(ball + "<>", ball + "<>"));
 
-    @Override
-    public void onComplete() {
-    }
-});
+// Second way
+//        Function<String, Observable<String>> getDoubleDiamonds =
+//                ball -> Observable.just(ball + "<>", ball + "<>");
+//        Observable<String> source = Observable.fromArray(balls).flatMap(getDoubleDiamonds);
+
+source.subscribe(System.out::println);
+
+/*
+1<>
+1<>
+3<>
+3<>
+5<>
+5<>
+*/
+```
+
+#### filter
+
+>Array 의 값을 Observable 형태로 변환
+
+```
+String[] objs = {"1 CIRCLE", "2 DIAMOND", "3 TRIANGLE", "4 DIAMOND", "5 CIRCLE", "6 HEXGON"};
+
+// First way
+Observable<String> source = Observable.fromArray(objs)
+.filter(obj -> obj.endsWith("CIRCLE"));
+
+// Second way
+//        Predicate<String> getFilteredData = data -> data.endsWith("CIRCLE");
+//        Observable<String> source = Observable.fromArray(objs).filter(getFilteredData);
+
+source.subscribe(System.out::println);
+
+/*
+1 CIRCLE
+5 CIRCLE
+*/
+```
+
+#### filter 와 유사한 함수
+- first(default) : Observable의 첫 번째 값을 필터함. 만약 값이 없다면 기본값 리턴.
+- last(default) : Observable의 마지막 값을 필터함. 만약 값이 없다면 기본값 리턴.
+- take(N) : 최초 N개 값만 가져옴.
+- takeLast(N) : 마지막 N개 값을 건너 뜀.
+- skip(N) : 최초 N개 값을 건너뜀.
+- skipLast(N) : 마지막 N개 값은 건너뜀.
+
+```
+Integer[] numbers = new Integer[]{100, 200, 300, 400, 500, 600};
+Single<Integer> single;
+Observable<Integer> source;
+
+// first
+single = Observable.fromArray(numbers).first(-1);
+single.subscribe(data -> System.out.println("first() value = " + data));
+
+// last
+single = Observable.fromArray(numbers).last(999);
+single.subscribe(data -> System.out.println("last() value = " + data));
+
+// take(N)
+source = Observable.fromArray(numbers).take(3);
+source.subscribe(data -> System.out.println("take(3) value = " + data));
+
+// takeLast(N)
+source = Observable.fromArray(numbers).takeLast(3);
+source.subscribe(data -> System.out.println("takeLast(3) value = " + data));
+
+// skip(N)
+source = Observable.fromArray(numbers).skip(2);
+source.subscribe(data -> System.out.println("skip(3) value = " + data));
+
+// skipLast(N)
+source = Observable.fromArray(numbers).skipLast(2);
+source.subscribe(data -> System.out.println("skipLast(2) value = " + data));
+
+/*
+first() value = 100
+last() value = 600
+take(3) value = 100
+take(3) value = 200
+take(3) value = 300
+takeLast(3) value = 400
+takeLast(3) value = 500
+takeLast(3) value = 600
+skip(3) value = 300
+skip(3) value = 400
+skip(3) value = 500
+skip(3) value = 600
+skipLast(2) value = 100
+skipLast(2) value = 200
+skipLast(2) value = 300
+skipLast(2) value = 400
+*/
 ```
 
 
-
-
-#### fromArray
-
-Array 의 값을 Observable 형태로 변환
-
-```
-Integer[] arr = new Integer[]{ 1, 2, 3, 4, 5 };
-Observable observable = Observable.fromArray(arr);
-```
