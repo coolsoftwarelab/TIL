@@ -152,6 +152,34 @@ source.subscribe(System.out::println);
 */
 ```
 
+#### interval
 
+>일정 시간 간격으로 데이터 흐름을 생성한다.<br>
+일정 시간 지연 후 시작할 수도 있고, 최초 지연 시간(initialDelay)을 조절할 수도 있다.
+
+```
+System.out.println("time start : " + System.currentTimeMillis());
+Observable<Long> source = Observable.interval(1000L, TimeUnit.MILLISECONDS)
+        .map(data -> {
+            System.out.println("time loop : " + System.currentTimeMillis());
+            return (data + 1) * 100;
+        })
+        .take(5);
+source.subscribe(System.out::println);
+
+try {
+    Thread.sleep(10000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+/*
+100
+200
+300
+400
+500
+*/
+```
 
 
