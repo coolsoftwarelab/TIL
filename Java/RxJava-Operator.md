@@ -182,4 +182,23 @@ try {
 */
 ```
 
+#### timer
 
+>일정 시간이 지난 후에 한 개의 데이터를 발행하고 onComplete() 이벤트가 발생한다.
+
+```
+Observable<String> source = Observable.timer(500L, TimeUnit.MILLISECONDS)
+        .map(data -> new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+                .format(new Date()));
+source.subscribe(System.out::println);
+
+try {
+    Thread.sleep(1000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+/*
+2019/07/30 10:32:01
+ */
+```
