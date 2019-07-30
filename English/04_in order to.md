@@ -1,7 +1,6 @@
 ## in order to (~을 하기 위하여)
 
-반복되는 단어 `in order to`를 `to`로 줄인다.
-in order to   ->   ~~in order~~ to  
+반복되는 단어 `in order to`를 `to`로 줄인다. (in order to -> ~~in order~~ to)  
 in order to 이하는 빼도 문장에 영향을 주지 않는다.
 
 ### 정리 1  
@@ -16,10 +15,12 @@ in order to 와 to부정사 to 비교
 
 Ex)  
 in order to 의 to  
+
 I bought a ticket ~~to see a movie.~~ 문법 (O)  
 ~~To see a movie,~~ I bought a ticket. 문법 (O)
 
 to부정사 to  
+
 ~~To see a movie~~ costs money. 문법 (X ) / 내용전달 (X)  
 I like ~~to see a movie.~~   문법 (O) / 내용전달 (X)
 
