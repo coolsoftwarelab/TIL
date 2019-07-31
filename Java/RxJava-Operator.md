@@ -208,8 +208,14 @@ try {
 >주어진 값 n 부터 m 까지의 Integer 객체를 발행한다. (n, m)
 
 ```
-Observable<Integer> source = Observable.range(1, 5);
+Observable<Integer> source = Observable.range(1, 3);
 source.subscribe(System.out::println);
+
+/*
+1
+2
+3
+*/
 ```
 
 
