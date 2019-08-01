@@ -218,7 +218,26 @@ source.subscribe(System.out::println);
 */
 ```
 
+### intervalRange
 
+>일정한 간격으로 시작 숫자(n) 로부터 m 개 값을 생성하고 onComplete 이벤트 발생  
+
+```
+Observable<Long> source = Observable.intervalRange(1,   // start
+        3,                                              // count
+        100L,                                           // initialDelay
+        100L,                                           // preriod
+        TimeUnit.MILLISECONDS);                         // unit
+source.subscribe(System.out::println);
+
+Thread.sleep(1000);
+
+/*
+1
+2
+3
+*/
+```
 
 
 
