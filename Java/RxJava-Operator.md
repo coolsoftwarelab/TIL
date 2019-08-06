@@ -239,9 +239,20 @@ Thread.sleep(1000);
 */
 ```
 
+#### defer
 
+추가예정
 
+#### repeat
 
+>  반복 실행
 
+```
+String[] balls = {"1", "2", "3"};
+Observable<String> source = Observable.fromArray(balls)
+        .repeat(3);
 
+source.doOnComplete(() -> System.out.println("onComplete"))
+        .subscribe(System.out::println);
+```
 
