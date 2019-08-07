@@ -256,3 +256,29 @@ source.doOnComplete(() -> System.out.println("onComplete"))
         .subscribe(System.out::println);
 ```
 
+#### concatMap
+
+> flatMap과는 달리 먼저 들어온 데이터 순서대로 처리해서 결과를 낼 수 있도록 보장한다.
+
+```
+String[] balls = {"1", "3", "5"};
+Observable<String> source = Observable.interval(100L, TimeUnit.MILLISECONDS)
+        .map(Long::intValue)
+        .map(idx -> balls[idx])
+        .take(balls.length)
+        .concatMap(ball -> Observable.interval(200L, TimeUnit.MILLISECONDS)
+        .map(notUsed -> ball + "<>")
+        .take(2)
+        );
+source.subscribe(System.out::println);
+Thread.sleep(2000);
+
+/*
+1<>
+1<>
+3<>
+3<>
+5<>
+5<>
+ */
+```
