@@ -266,7 +266,7 @@ Observable<String> source = Observable.interval(100L, TimeUnit.MILLISECONDS)
         .take(balls.length)
         .concatMap(ball -> Observable.interval(200L, TimeUnit.MILLISECONDS)
         .map(notUsed -> ball + "<>")
-        .take(2)
+        .take(3)
         );
 source.subscribe(System.out::println);
 Thread.sleep(2000);
@@ -274,8 +274,11 @@ Thread.sleep(2000);
 /*
 1<>
 1<>
+1<>
 3<>
 3<>
+3<>
+5<>
 5<>
 5<>
  */
