@@ -283,3 +283,36 @@ Thread.sleep(2000);
 5<>
  */
 ```
+
+#### switchMap()
+
+> 순서를 보장하기위해 기존에 진행 중이던 작업을 중단.  
+여러 개의 값이 발행되었을 때 마지막으로 들어온 값만 처리하고 싶을 때 사용 (ex. 센서 값)
+
+```
+String[] balls = {"1", "3", "5"};
+Observable<String> source = Observable.interval(100L, TimeUnit.MILLISECONDS)
+        .map(Long::intValue)
+        .map(idx -> balls[idx])
+        .take(balls.length)
+        .doOnNext(System.out::println)
+        .switchMap(ball -> Observable.interval(200L, TimeUnit.MILLISECONDS)
+                .map(notUsed -> ball + "<>")
+                .take(3)
+        );
+source.subscribe(System.out::println);
+Thread.sleep(2000);
+
+/*
+1
+3
+5
+5<>
+5<>
+5<>
+*/
+```
+
+
+
+
