@@ -313,6 +313,23 @@ Thread.sleep(2000);
 */
 ```
 
+#### zip
 
+> 입력 Observable 에서 데이터를 모두 새로 발행했을 때 그것을 합해준다. (결합)  
+
+```
+Observable<Integer> subscribe = Observable.zip(
+        Observable.just(1, 2, 3),
+        Observable.just(10, 20, 30),
+        Observable.just(100, 200, 300),
+        (a, b, c) -> a + b + c);
+subscribe.subscribe(System.out::println);
+
+/*
+111
+222
+333
+ */
+```
 
 
