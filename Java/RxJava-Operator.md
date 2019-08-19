@@ -332,4 +332,25 @@ subscribe.subscribe(System.out::println);
  */
 ```
 
+#### groupBy
 
+>  어떤 기준(keySelector 인자)으로 단일 Observable을 여러 개로 이루어진 Observable 그룹(GroupObservable)으로 만든다.
+
+```
+String[] objs = {"6", "4", "2-T", "2", "6-T", "4-T"};
+Observable<GroupedObservable<String, String>> source =
+        Observable.fromArray(objs).groupBy(d -> getShape(d));
+source.subscribe(obj -> {
+    obj.subscribe(val ->
+            System.out.println("GROUP : " + obj.getKey() + "\t Value : " + val));
+});
+
+/*
+GROUP : BALL	 Value : 6
+GROUP : BALL	 Value : 4
+GROUP : TRIANGLE	 Value : 2-T
+GROUP : BALL	 Value : 2
+GROUP : TRIANGLE	 Value : 6-T
+GROUP : TRIANGLE	 Value : 4-T
+*/
+```
