@@ -354,3 +354,20 @@ GROUP : TRIANGLE	 Value : 6-T
 GROUP : TRIANGLE	 Value : 4-T
 */
 ```
+
+#### scan
+
+> reduce()  함수와 달리 실행할 때마다 입력값에 맞는 중간 결과 및 최종 결과를 구독자에게 발행한다.
+
+```
+String[] balls = {"1", "3", "5"};
+Observable<String> source = Observable.fromArray(balls)
+        .scan((ball1, ball2) -> ball2 + "(" + ball1 + ")");
+source.subscribe(System.out::println);
+
+/*
+1
+3(1)
+5(3(1))
+ */
+```
