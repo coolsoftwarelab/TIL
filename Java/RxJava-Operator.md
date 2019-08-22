@@ -371,3 +371,32 @@ source.subscribe(System.out::println);
 5(3(1))
  */
 ```
+
+#### combineLastest
+
+> 2개 이상의 Observable을 기반으로 Observable 각각의 값이 변경되었을 때 갱신해주는 함수이다.
+
+```
+String[] data1 = {"6", "7", "4", "2" };
+String[] data2 = {"DIAMOND", "STAR", "PENTAGON" };
+
+Observable<String> source = Observable.combineLatest(
+        Observable.fromArray(data1)
+                .zipWith(Observable.interval(100L, TimeUnit.MILLISECONDS),
+                        (shape, notUsed) -> Shape.getColor(shape)),
+Observable.fromArray(data2)
+        .zipWith(Observable.interval(150L, 200L, TimeUnit.MILLISECONDS),
+                (shape, notused) -> Shape.getSuffix(shape)), (v1, v2) -> v1 + v2);
+source.subscribe(System.out::println);
+
+Thread.sleep(1000);
+
+/*
+6<>
+7<>
+4<>
+4-S
+2-S
+2-P
+*/
+```
