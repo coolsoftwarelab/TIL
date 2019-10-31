@@ -64,6 +64,28 @@ Companion obejct called
 
 `lazy`
 
+>호출 시점에 by lazy 로 한번 초기화 후, 이후에는 기억된 결과를 반환
+
+- val 에서 사용
+
+```
+val lazyValue: String by lazy {
+    println("computed!")
+    "Hello"
+}
+
+fun main() {
+    println(lazyValue)
+    println(lazyValue)
+}
+
+/*
+    computed!
+    Hello
+    Hello
+*/
+```
+
 `use`
 
 `inline`
