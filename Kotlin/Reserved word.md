@@ -86,6 +86,10 @@ fun main() {
 */
 ```
 
+`external`
+
+> Java 에서 JNI 사용을 위한 'natvie' 키워드와 동일
+
 `use`
 
 `inline`
