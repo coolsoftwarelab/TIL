@@ -32,3 +32,32 @@ java.lang.AssertionError:
 Expected :4
 Actual   :5
 ```
+
+### 간단한 메소드 테스트
+
+src->Main->...->Calculator.kt
+```
+class Calculator {
+    fun add(a: Int, b: Int): Int {
+        return a + b
+    }
+}
+```
+
+src->test->...->CalculatorTest.kt
+```
+class CalculatorTest {
+    lateinit var calc: Calculator
+
+    @Before
+    fun setUp() {
+        calc = Calculator()
+    }
+
+    @Test
+    fun addTest() {
+        val result = calc.add(1, 2)
+        assertEquals(3, result)
+    }
+}
+```
