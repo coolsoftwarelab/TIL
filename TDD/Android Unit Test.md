@@ -1,4 +1,4 @@
-## Android Unit Test
+## Android Unit Test (안드로이드 단위 테스트)
 
 JUnit 과 Mock 활용
 
@@ -61,3 +61,48 @@ class CalculatorTest {
     }
 }
 ```
+
+### Mockito Test
+src->Main->...->Calculator.kt
+```
+class Calculator {
+    fun add(a: Int, b: Int): Int {
+        return a + b
+    }
+}
+```
+
+src->Main->...->LocalDB.kt
+```
+class LocalDB {
+    private var value : Int = 0
+
+    fun getValue(): Int {
+        return value
+    }
+}
+```
+
+src->test->...->CalculatorTest.kt
+```
+    private lateinit var calc: Calculator
+    private lateinit var db: LocalDB
+
+    @Before
+    fun setUp() {
+        calc = Calculator()
+        db = mock(LocalDB::class.java)
+    }
+
+    @Test
+    fun addTest() {
+        `when`(db.getValue()).thenReturn(1)
+        val dbValue = db.getValue()
+        assertTrue(dbValue == 1)
+
+        val result = calc.add(dbValue, 2)
+        assertEquals(3, result)
+    }
+```
+
+
