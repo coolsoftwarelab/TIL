@@ -1,5 +1,7 @@
 # Android MVC
 
+**안드로이드 MVC 는 Activity/Fragment가 Controller 와 View 역할을 같이 가지고 있어 혼돈이 올 수 있다.**
+
 ### 모델 (Model)
 > '모델' 은 데이터 + 상태 + 비즈니스 로직
 
