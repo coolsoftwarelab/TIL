@@ -21,4 +21,11 @@
 ### Client API Token 획득 플로우?
 Authorization Code 요청 (사용자 본인인증or로그인) -> 사용자 인증됨 -> Authorization Code 획득 -> Access Token 요청 -> Access Token 획득
 
-### 회원등록 절차
+### 센터인증 Access Token 발급절차
+
+1. SMS 본인인증
+2. KFTC 계좌등록
+3. ARS 인증 (정보 수신용 Email 필수)
+4. Callback URL 호출 (웹뷰에서 페이지 URL 체크로 확인)
+5. Authorization code 수신
+6. Authorization code 로 Token 요청, 요청 성공하면 Aceess Token 과 Refresh Toekn 획득함
