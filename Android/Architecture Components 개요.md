@@ -22,4 +22,4 @@ Room은 SQLite 문의 컴파일 타임 검사를 제공하며 RxJava, Flowable �
 
 
 #### 구글 AAC 가이드
-![](https://cdn-images-1.medium.com/max/1600/1*kEjRZjzQ4lxgMITbU8iidg.png)
+![](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png)
