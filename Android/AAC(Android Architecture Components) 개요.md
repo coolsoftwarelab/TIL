@@ -1,7 +1,7 @@
-## Architecture Components.
+## AAC (Android Architecture Components)
 
 >Android 아키텍처 구성 요소는 강력하고 테스트 가능하며 유지 관리가 쉬운 앱을 디자인하는 데 도움이되는 라이브러리 모음.
-Android Jetpack 의 일부이다.
+**Android Jetpack** 의 일부이다.
 
 ### Lifecycle-Aware Components
 앱의 라이프 사이클을 관리. 
