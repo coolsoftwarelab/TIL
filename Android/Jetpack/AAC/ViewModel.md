@@ -17,4 +17,6 @@
 - ViewModel에 액티비티, 프래그먼트, 뷰에 대한 컨텍스트를 저장하면 안된다. (메모리 릭)
 
 #### 참조
+https://developer.android.com/topic/libraries/architecture/viewmodel#java
+
 https://medium.com/@jungil.han/%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-viewmodel-%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0-2e4d136d28d2
