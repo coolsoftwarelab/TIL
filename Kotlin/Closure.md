@@ -35,6 +35,26 @@ myView.setOnClickListener {
 }
 ```
 
+### kotlin bytecode를 decompile 해보면 final 로 선언한 객체를 넘겨 내부적으로 처리한다.
+
+Ex3)
+```
+var a = 0
+Thread {
+    a = 1
+}
+```
+
+`Ex3)` 의 kotlin bytecode
+```
+final IntRef a = new IntRef();
+a.element = 0;
+new Thread((Runnable)(new Runnable() {
+ public final void run() {
+    a.element = 1;
+ }
+}));
+```
 
 
 
