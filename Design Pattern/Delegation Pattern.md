@@ -5,6 +5,9 @@
 
 다른 클래스의 기능을 사용하되 그 기능을 변경하지 않으려면 상속 대신 위임
 
+코틀린은 by 키워드로 쉽게 구현 가능
+
+Java
 ```
 public class Main {
     public static void main(String[] args) { 
@@ -25,5 +28,8 @@ class RealPrinter {
 }
 ```
 
+Kotlin
+```
+```
 
 참조 : https://zetawiki.com/wiki/%EC%9C%84%EC%9E%84_%ED%8C%A8%ED%84%B4
