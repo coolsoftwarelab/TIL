@@ -116,3 +116,5 @@ number = number.also {
 }
 println("number : $number")  // number : 1
 ```
+
+![](https://miro.medium.com/max/700/0*wZoYYxqh_7_B8JQ2.png)
