@@ -28,41 +28,6 @@ alice.incrementAge()
 println(alice)
 ```
 
-## also
-
-```
-fun <T> T.also(block: (T) -> Unit) : T
-```
-
->block 안의 코드 수행결과와 상관없이 T객체(this) 를 반환한다.
-
-연산 결과와 상관없이 number 는 1 이다.
-```
-var number = 1
-number = number.also {
-    it + 10
-}
-println("number : $number")  // number : 1
-```
-
-## apply
-
-```
-fun <T> T.apply(block: T.() -> Unit) : T
-```
-
->함수를 호출하는 객체(T)를 이어지는 block의 receiver(리시버)로 전달하고, 객체 자체(T)를 반환합니다.
-
-#### 리시버 : block내에서 객체(T)의 메소드 및 속성에 바로 접근할 수 있도록 할 객체
-
-```
-val jake = Person()
-val stringDescription = jake.apply {
-    name = "Jake"
-    age = 30
-    about = "Android developer"
-}
-```
 
 ## run
 
@@ -95,6 +60,7 @@ val person = run {
 }
 ```
 
+
 ## with
 
 ```
@@ -114,3 +80,39 @@ with(person) {
 ```
 
 
+## apply
+
+```
+fun <T> T.apply(block: T.() -> Unit) : T
+```
+
+>함수를 호출하는 객체(T)를 이어지는 block의 receiver(리시버)로 전달하고, 객체 자체(T)를 반환합니다.
+
+#### 리시버 : block내에서 객체(T)의 메소드 및 속성에 바로 접근할 수 있도록 할 객체
+
+```
+val jake = Person()
+val stringDescription = jake.apply {
+    name = "Jake"
+    age = 30
+    about = "Android developer"
+}
+```
+
+
+## also
+
+```
+fun <T> T.also(block: (T) -> Unit) : T
+```
+
+>block 안의 코드 수행결과와 상관없이 T객체(this) 를 반환한다.
+
+연산 결과와 상관없이 number 는 1 이다.
+```
+var number = 1
+number = number.also {
+    it + 10
+}
+println("number : $number")  // number : 1
+```
