@@ -97,9 +97,20 @@ val person = run {
 
 ## with
 
+```
+inline fun <T, R> with(receiver: T, block: T.() -> R): R
+```
 
+>인자로 받는 객체를, 블록의 리시버로 전달하고, 블록의 결과값을 반환한다.  
+run함수와 기능이 거의 동일. run의 경우, receiver가 없지만 with 에서는 receiver로 전달할 객체를 처리
 
-
-
+```
+val person = Person("James", 56)
+with(person) {
+    println(name)   // James
+    println(age)    // 56
+    //자기자신을 반환해야 하는 경우 it이 아닌 this를 사용한다
+}
+```
 
 
