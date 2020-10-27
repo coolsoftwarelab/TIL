@@ -117,4 +117,9 @@ number = number.also {
 println("number : $number")  // number : 1
 ```
 
+### 차트
+
+![](https://miro.medium.com/max/504/1*t3hR3BuuWySMGdcN5SNhXg.png)
+
+
 ![](https://miro.medium.com/max/700/0*wZoYYxqh_7_B8JQ2.png)
