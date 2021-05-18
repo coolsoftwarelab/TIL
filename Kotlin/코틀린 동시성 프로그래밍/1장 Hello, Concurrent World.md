@@ -34,7 +34,7 @@ GUI 애플리케이션은 응답성 유지를 위해 UI 스레드를 블록하�
 
 #### 동시성은 병렬성이 아니다.
 
-![image](https://user-images.githubusercontent.com/4969393/118619973-077bd980-b800-11eb-836e-20b26f35739f.png){: width="30%" height="30%"}
+<img src="https://user-images.githubusercontent.com/4969393/118619973-077bd980-b800-11eb-836e-20b26f35739f.png" height="300px" width="700px">
 
 
 
