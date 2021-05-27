@@ -116,3 +116,67 @@ Ex) 스레드 Y에서 작업이 끝나기를 기다리면서 스레드 X를 블�
 코틀린은 channels, actors, mutual exclusions와 같은 기본형(primitives)도 제공해 스레드를 블록하지 않고 동시성 코드를 효과적으로 통신하고 동기화하는 메커니즘을 제공한다.
 
 #### 명시적 선언
+>연산이 동시에 실행돼야 하는 시점을 명시적으로 만드는 것이 중요하다.
+
+순차실행
+```
+fun main(args: Array<String>) = runBlocking {
+    val time = measureTimeMillis {
+        val name = getName()
+        val lastName = getLastName()
+    }
+    println("Excution took $time ms")
+}
+
+suspend fun getName(): String {
+    delay(1000)
+    return "Susan"
+}
+
+suspend fun getLastName(): String {
+    delay(1000)
+    return "Calvin"
+}
+
+// 실행결과
+// Task :TestKt.main()
+// Excution took 2034 ms
+```
+
+위 코드에서 getLastName과 getName()간 의존성이 없기 때문에 동시에 수행하는 편이 낫다.
+```
+fun main(args: Array<String>) = runBlocking {
+    val time = measureTimeMillis {
+        val name = async { getName() }
+        val lastName = async { getLastName() }
+
+        println("Hello, ${name.await()} ${lastName.await()}")
+    }
+
+    println("Excution took $time ms")
+}
+
+// 실행결과
+> Task :TestKt.main()
+Hello, Susan Calvin
+Excution took 1036 ms
+```
+async{} 를 호출해 두 함수를 동시에 실행해야 하며 await()를 호출해 두 연산에 모두 결과가 나타낼 까지 main()이 일시중단되도록 요청함
+
+#### 가독성
+
+`suspend`  
+일시중단연산(Suspending computations)은 해당 스레드를 차단하지않고 실행을 일시 중지할 수 잇는 연산이다.  
+일시 중단 연산을 통해 스레드를 다시 시작할 때까지 스레드를 다른 연산에서 사용할 수 있다.
+
+- async() : 결과가 예상되는 코루틴을 시작하는 데 사용된다. 결과또는예외를 포함하는 `Deferred<T>`를 반환한다
+- lauch() : 결과를 반환하지 않는 쿠로틴을 시작한다.  자체 혹은 자식 코루틴의 실행을 취소하기 위해 `Job`을 반환한다
+- runBlocking : 블로킹 코드를 일시 중지 가능한 코드로 연결하기 위해 작성됐다. 보통 mian()메소드와 유닛 테스트에 사용된다. runBlocking()은 코루틴의 실행이 끝날 때까지 현재 스레드를 차단한다.
+
+async 예제
+```
+val result = GlobalScope.async {
+    isPalindrome(word = "Sample")
+}
+result.await()
+```
