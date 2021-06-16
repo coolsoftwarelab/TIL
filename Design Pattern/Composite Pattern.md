@@ -60,54 +60,56 @@ class Exam {
 }
 ```
 
-tmp
+exam
 ```
-
 fun main(args: Array<String>) {
-    val lab = Department("연구실")
-    val mobileTeam = Department("마케팅 팀")
+    println("kotlin main start")
 
-    mobileTeam.apply {
-        addChild(Employee("일길동"))
-        addChild(Employee("이길동"))
-    }
+    val lab = Department("laboratory")
+    val mobileTeam = Department("mobile team")
+    val marketingTeam = Department("marketing team")
 
+    mobileTeam.addChild(Employee("mobile one"))
+    mobileTeam.addChild(Employee("mobile two"))
+    mobileTeam.addChild(Employee("mobile three"))
+
+    marketingTeam.addChild(Employee("marketing one"))
+
+    mobileTeam.addChild(marketingTeam)
     lab.addChild(mobileTeam)
+
     lab.printName()
 }
 
 // Component
-abstract class Node {
-    abstract fun getName(): String
+interface Node {
+    fun printName()
 }
 
 // Leaf
-class Employee(name: String) : Node() {
+class Employee(name: String) : Node {
     private val empName = name
-    override fun getName(): String {
-        return empName
+
+    override fun printName() {
+        println(empName)
     }
 }
 
 // Composite
-class Department(name: String) : Node() {
+class Department(name: String) : Node {
     private val list: ArrayList<Node> = ArrayList()
     private val depName = name
-
-    override fun getName(): String {
-        return depName
-    }
 
     fun addChild(item: Node) {
         list.add(item)
     }
 
-    fun printName() {
+    override fun printName() {
+        println(depName)    // composit 패턴에 맞는 코드인가?
+
         for (item: Node in list) {
-            println("name : ${item.getName()}")
+            item.printName()
         }
     }
 }
-
-
 ```
