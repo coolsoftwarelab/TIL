@@ -59,3 +59,55 @@ class Exam {
   }
 }
 ```
+
+tmp
+```
+
+fun main(args: Array<String>) {
+    val lab = Department("연구실")
+    val mobileTeam = Department("마케팅 팀")
+
+    mobileTeam.apply {
+        addChild(Employee("일길동"))
+        addChild(Employee("이길동"))
+    }
+
+    lab.addChild(mobileTeam)
+    lab.printName()
+}
+
+// Component
+abstract class Node {
+    abstract fun getName(): String
+}
+
+// Leaf
+class Employee(name: String) : Node() {
+    private val empName = name
+    override fun getName(): String {
+        return empName
+    }
+}
+
+// Composite
+class Department(name: String) : Node() {
+    private val list: ArrayList<Node> = ArrayList()
+    private val depName = name
+
+    override fun getName(): String {
+        return depName
+    }
+
+    fun addChild(item: Node) {
+        list.add(item)
+    }
+
+    fun printName() {
+        for (item: Node in list) {
+            println("name : ${item.getName()}")
+        }
+    }
+}
+
+
+```
