@@ -117,6 +117,16 @@ number = number.also {
 println("number : $number")  // number : 1
 ```
 
+singleton also exam
+```
+@JvmStatic fun getInstance(context : Context): A =
+    instance ?: synchronized(this) {
+        instance ?: Singleton(context).also {
+            instance = it
+        }
+}
+```
+
 ### 차트
 
 ![](https://miro.medium.com/max/504/1*t3hR3BuuWySMGdcN5SNhXg.png)
