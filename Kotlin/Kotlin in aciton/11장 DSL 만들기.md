@@ -197,6 +197,10 @@ inline fun <T> T.apply(block: T.() -> Unit): T {
 
 inline fun <T, R> with(receiver: T, block: T.() -> R): R = 
 	recevier.block()	// 람다를 호출해 얻은 결과를 반환
+	
+// 예시	
+// map.apply { this[2] = "two" }
+// with(map) { this[3] = "three" }
 ```
 - apply함수
   - 수신 객체 타입에 대한 확장 함수로 선언됐기 때문에 수신 객체의 메소드처럼 불린다.
