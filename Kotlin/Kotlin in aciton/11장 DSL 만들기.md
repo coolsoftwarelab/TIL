@@ -219,6 +219,19 @@ inline fun <T, R> with(receiver: T, block: T.() -> R): R =
 
 ### 수신 객체 지정 람다를 HTML 빌더 안에서 사용
 
+>HTML 빌더는 HTML을 만들기 위한 코틀린 DSL을 뜻한다.  
+빌더를 사용하면 객체 계층 구조를 선언적으로 정의할 수 있다. XML, UI컴포넌트 레이아웃 정의할 때 유용하다
+
+코틀린
+
+```
+fun createSimpleTable() = createHTML().
+table { 
+	tr { // == (this@table).tr
+		td { +"cell" } // == (this@tr).td
+	}
+}
+```
 
 
 
