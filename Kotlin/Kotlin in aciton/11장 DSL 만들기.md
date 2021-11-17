@@ -1,14 +1,12 @@
 ## DSL(Domain-Specific Language)
 
 >DSL (도메인 특화 언어)  
-특정 분야에 최적화된 프로그래밍 언어다.  
-해당 분야 또는 도메인의 개념과 규칙을 사용  
+특정 분야에 최적화된 프로그래밍 언어다. 해당 분야 또는 도메인의 개념과 규칙을 사용  
 ex) SQL, 정규식
 
 ### API 에서 DSL 로
 
->라이브러리가 외부 사용자에게 프로그래밍 API를 지원하는 것처럼,  
-모든 클래스는 다른 클래스에게 자신과 상호작용할 수 있는 가능성을 제공한다.  
+>라이브러리가 외부 사용자에게 프로그래밍 API를 지원하는 것처럼, 모든 클래스는 다른 클래스에게 자신과 상호작용할 수 있는 가능성을 제공한다.  
 이런 상호작용을 이해하기 쉽고 명확하게 표현해야 유지보수가 쉽다.
 
 #### 좋은 API란
@@ -30,8 +28,7 @@ ex) SQL, 정규식
     * 특정 영역에 특화되어 자체 문법이 있기 때문에 범용 언어로 만든 애플리케이션과 조합하기가 어렵다.
         * ex) 내부 DB 사용 시 쿼리문 작성 <– 컴파일 시점에 검증 불가
 
-코틀린DSL도 컴파일 시점에 타입이 정해지므로,  
-오류 감지, IDE 지원 등 모든 정적 타입 지정 언어의 장점을 누릴 수 있다.
+코틀린DSL도 컴파일 시점에 타입이 정해지므로 오류 감지, IDE 지원 등 모든 정적 타입 지정 언어의 장점을 누릴 수 있다.
 
 11장 에서는 깔끔한 API에서 한걸음 더 나아가 DSL 구축을 도와주는 코틀린 기능을 살펴본다.
 
@@ -66,29 +63,27 @@ ORDER BY COUNT(Customer.id) DESC LIMIT 1
 ### DSL의 구조
 
 - DSL은 구조 또는 문법을 독립적으로 가진다.
-- DSL은 여러 함수 호출을 조합해서 연산을 만드는 것 또한 내부 DSL 적인 특징이다.
+- 여러 함수 호출을 조합해서 연산을 만드는 것 또한 내부 DSL 적인 특징이다.
 
-gradle 에서 람다 중첩을 통해 구조를 만듦
 ```
+gradle 에서 람다 중첩을 통해 구조를 만듦
 dependencies {
 	compile("junit:junit:4.11")
 	compile("com.google.inject:guice:4.1.0")
-```
+}
 
-일반 명령-질의 API를 사용. 코드에 중복이 많다
-```
+// 일반 명령-질의 API를 사용. 코드에 중복이 많다
 project.dependencies.add("compile", "junit:junit:4.11")
 project.dependencies.add("compile", "com.google.inject:guice:4.1.0")
-```
 
-```
 // 코틀린테스트를 이용한 테스트 코드 호출. 메소드 호출 연쇄를 통해 구조를 만듦
 str should startWith("kot")
 
 // 일반 JUnit API 사용
 assertTrue(str.startsWith("kot"))
 ```
-JUnit을 사용하면 잡음이 더 많고 읽기 쉽지 않다.
+
+JUnit을 사용하면 잡음이 더 많고 읽기 쉽지 않다고 한다.
 
 ### 내부 DSL로 HTML 만들기
 
@@ -125,16 +120,16 @@ fun createAnotherTable() = createHTML().table {
 }
 
 // 생성되는 html 결과
-//<table>
-//	<tr>
-//		<td>1</td>
-//    <td>one</td>
-//	</tr>
-//	<tr>
-//		<td>2</td>
-//    <td>two</td>
-//	</tr>
-//</table>
+<table>
+	<tr>
+		<td>1</td>
+	    <td>one</td>
+	</tr>
+	<tr>
+		<td>2</td>
+    	<td>two</td>
+	</tr>
+<table>
 ```
 
 #### 코틀린 코드로 HTML을 만들려는 이유
