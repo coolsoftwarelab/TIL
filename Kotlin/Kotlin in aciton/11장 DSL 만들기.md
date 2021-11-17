@@ -193,6 +193,31 @@ println(s)
 ![](https://user-images.githubusercontent.com/4969393/142159511-a04e5ae5-9a74-482f-abf6-2ed56123ccc8.png)
 
 
+apply를 이용한 buildString() 정의
+```
+fun buildString(builderActon: StringBuilder.() -> Unit): String = 
+	StringBuilder().apply(builderAction).toString()
+```
+
+apply, with 함수의 구현 참고
+```
+inline fun <T> T.apply(block: T.() -> Unit): T {
+	block()			// this.block()과 같다.
+	return this		// 수신 객체 반환
+}
+
+inline fun <T, R> with(receiver: T, block: T.() -> R): R = 
+	recevier.block()	// 람다를 호출해 얻은 결과를 반환
+```
+- apply함수
+  - 수신 객체 타입에 대한 확장 함수로 선언됐기 때문에 수신 객체의 메소드처럼 불린다.
+  - 수신 객체를 묵시적 인자(this)로 받게 된다.
+  - 수신 객체를 다시 반환한다.
+- with 함수
+  - 수신 객체를 첫번째 파라미터로 받는다.
+  - 람다를 호출해 얻은 결과를 반환한다.
+
+### 수신 객체 지정 람다를 HTML 빌더 안에서 사용
 
 
 
