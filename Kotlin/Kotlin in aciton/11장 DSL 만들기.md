@@ -120,11 +120,11 @@ fun createAnotherTable() = createHTML().table {
 <table>
 	<tr>
 		<td>1</td>
-	    <td>one</td>
+		<td>one</td>
 	</tr>
 	<tr>
 		<td>2</td>
-    	<td>two</td>
+		<td>two</td>
 	</tr>
 <table>
 ```
@@ -220,8 +220,8 @@ inline fun <T, R> with(receiver: T, block: T.() -> R): R =
 ```
 fun createSimpleTable() = createHTML().
 table { 
-	tr { // == (this@table).tr
-		td { +"cell" } // == (this@tr).td
+	tr { 				// == (this@table).tr
+		td { +"cell" } 	// == (this@tr).td
 	}
 }
 ```
