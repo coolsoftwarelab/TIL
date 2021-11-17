@@ -241,8 +241,6 @@ fun createSimpleTable() = createHTML().
 
 ### invoke 관례를 사용한 더 유연한 블록 중첩
 
-- invoke 관례를 사용하면 객체를 함수처럼 호출할 수 있다.
-
 #### invoke 관례: 함수처럼 호출할 수 있는 객체
 
 operator 변경자가 붙은 invoke 메소드 정의가 들어있는 클래스의 객체는 함수처럼 부를 수 있다.
