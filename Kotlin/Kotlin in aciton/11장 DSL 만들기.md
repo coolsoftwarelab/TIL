@@ -80,21 +80,75 @@ dependencies {
 	compile("com.google.inject:guice:4.1.0")
 ```
 
-// 일반 명령-질의 API를 통해 디펜더시 설정
+일반 명령-질의 API를 사용. 코드에 중복이 많다
 ```
 project.dependencies.add("compile", "junit:junit:4.11")
 project.dependencies.add("compile", "com.google.inject:guice:4.1.0")
 ```
 
+```
+// 코틀린테스트를 이용한 테스트 코드 호출. 메소드 호출 연쇄를 통해 구조를 만듦
+str should startWith("kot")
 
+// 일반 JUnit API 사용
+assertTrue(str.startsWith("kot"))
+```
+JUnit을 사용하면 잡음이 더 많고 읽기 쉽지 않다.
 
+### 내부 DSL로 HTML 만들기
 
+kotlinx.html 라이브러리을 이용하여 HTML 페이지를 생성
+```
+fun createSimpleTable() = createHtml().
+	table {
+		tr {
+			td { +"cell" }
+		}
+}
+```
 
+생성되는 html 결과
+```
+<table>
+	<tr>
+		<td>cell</td>
+	</tr>
+</table>
+```
+createSimpleTable() 함수는 HTML 조각이 들어있는 문자열을 반환.
 
+동적으로 표의 칸을 생성하는 예제
+```
+fun createAnotherTable() = createHTML().table {
+  val numbers = mapOf(1 to "one", 2 to two)
+  for ((num, string) in numbers) {
+    tr {
+      td { +"$num" }
+      td { +string }
+    }
+  }
+}
 
+// 생성되는 html 결과
+//<table>
+//	<tr>
+//		<td>1</td>
+//    <td>one</td>
+//	</tr>
+//	<tr>
+//		<td>2</td>
+//    <td>two</td>
+//	</tr>
+//</table>
+```
 
+#### 코틀린 코드로 HTML을 만들려는 이유
+- 타입 안정성을 보장한다.
+  - 위 코드에서 td는 tr 내에서만 사용할 수 있다. 그렇지 않은 경우 컴파일이 되지 않는다.
+- 코틀린 코드를 원하는대로 사용할 수 있다.
+  - 맵에 들어있는 원소에 따라 동적으로 표의 칸을 생성할 수 있다.
 
-
+### 구조화된 API 구축 : DSL에서 
 
 
 
