@@ -233,5 +233,19 @@ table {
 }
 ```
 
+코틀린 HTML 빌더를 사용해 간단한 HTML 표 만들기
+```
+fun createSimpleTable() = createHTML().
+	table { 
+		tr {
+			td { +"cell" }
+		}
+}
 
+>>>> <table><tr><td></td></tr></table>
+
+```
+
+### invoke 관례를 사용한 
+ㄷㅓ 유여
 
