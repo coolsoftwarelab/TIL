@@ -246,6 +246,180 @@ fun createSimpleTable() = createHTML().
 
 ```
 
-### invoke 관례를 사용한 
-ㄷㅓ 유여
+### invoke 관례를 사용한 더 유연한 블록 중첩
 
+- invoke 관례를 사용하면 객체를 함수처럼 호출할 수 있다.
+
+#### invoke 관례: 함수처럼 호출할 수 있는 객체
+
+operator 변경자가 붙은 invoke 메소드 정의가 들어있는 클래스의 객체는 함수처럼 부를 수 있다.
+```
+class Greeter(val greeting: String) {
+  operator fun invoke(name: String) {
+    println("$greeting, $name!")
+  }
+}
+
+val bavarianGreeter = Greeter("Servus")
+bavarianGreeter("Dmitry")	// 컴파일 -> bavarianGreeter.invoke("Dmitry")
+
+>>>>> Servus, Dmitry!
+```
+
+#### invoke 관례와 함수형 타입
+
+- 인라인하는 람다를 제외한 모든 람다는 함수형 인터페이스(Function1 등)를 구현하는 클래스로 컴파일된다.
+- 람다를 함수처럼 호출하면 이 관례에 따라 invoke 메소드 호출로 변환된다.
+
+![](https://user-images.githubusercontent.com/4969393/142171308-df682190-69f4-4294-a85e-5372322dec17.png)
+
+```
+data class Issue(val id: String, val project: String, val type: String, val priority: String, val description: String)
+
+class ImportantIssuesPredicate(val project: String): (Issue) -> Boolean {	// 함수 타입을 부모 클래스로 사용
+  override fun invoke(issue: Issue): Boolean {	// invoke 메소드 구현
+    return issue.project == project && issue.isImportant()
+  }
+  
+  private fun Issue.isImportant(): Boolean {
+    return type == "Bug" &&
+            (priority == "Major" || priority == "Critical")
+  }
+}
+
+val i1 = Issue("IDEA-154446", "IDEA", "Bug", "Major", "Save settings failed")
+val i2 = Issue("KT-12183", "Kotlin", "Feature", "Normal", "Intention: convert serveral ~~")
+
+val predicate = ImportantIssuesPredicate("IDEA")
+for (issue in listOf(i1, i2).filter(predicate)) { // 술어를 filter에 넘김
+  println(issue.id)
+}
+
+
+>>> IDEA-154446
+```
+
+- 람다를 함수 타입 인터페이스를 구현하는 클래스로 변환하고 그 클래스의 invoke 메소드를 오버라이드하면 복잡한 람다가 필요한 구문을 리팩토링할 수 있다.
+- 위와 같이 리팩토링할 경우 람다 본문에서 따로 분리해낸 메소드가 영향을 끼치는 영역을 최소화할 수 있다는 장점이 있다.
+
+#### DSL의 invoke 관례: 그레이들에서 의존관계 정의
+
+```
+// case 1
+dependencies.compile("junit:junit:4.11")
+
+// case 2
+dependencies {
+	compile("junit:junit:4.11")
+}
+```
+
+유연한 DSL 문법을 제공하기 위해 invoke 사용하기
+```
+class DependencyHandler {
+	// 일반적인 명령형 API 정의
+	fun compile(coordinate: String) {
+		println("Added dependency on $coordinate")
+	}
+	
+	// invoke를 정의해 DSL 스타일 API를 제공
+	operator fun invoke(body: DependencyHandler.() -> Unit) {
+		body() // == this.body()
+	}
+}
+
+-------------------
+val dependencies = DependencyHandler()
+dependencies.compile("org.jetbrains.kotlin:kotlin-stdlib:1.0.0")
+
+>>>>>Added dependecy on org.jetbrains.kotlin:kotlin-stdlib:1.0.0
+
+dependencies {
+  compile("org.jetbrains.kotlin:kotlin-stdlib:1.0.0")
+}
+
+>>>>> Added dependecy on org.jetbrains.kotlin:kotlin-stdlib:1.0.0
+```
+
+두번째 호출은 다음과 같이 변환
+```
+dependencies.invoke({
+	this.compile("org.jetbrains.kotlin:kotlin-stdlib:1.0.0")
+})
+```
+
+- dependencies를 함수처럼 호출하면 람다를 인자로 넘기게 된다.
+- 람다의 타입은 확장 함수 타입(수신 객체를 지정한 함수 타입) 이다.
+- 지정한 수신 객체 타입은 DpendencyHandler이다.
+- invoke 메소드는 이 수신 객체 지정 람다를 호출한다.
+- invoke 메소드가 DependencyHandler의 메소드이므로 이 메소드 내부에서 this는 DependencyHandler 객체이다.
+- 따라서 invoke 안에서 DependencyHandler 타입의 객체를 따로 명시하지 않고 compile() 을 호출할 수 있다.
+
+### 실전 코틀린 DSL
+
+#### 중위 호출 연쇄: 테스트 프레임워크의 should
+
+코틀린테스트 DSL 단언문
+```
+s should startWith("kot")
+```
+
+```
+// should 함수 구현
+infix fun <T> T.should(matcher: Matcher<T>) = matcher.test(this)
+
+// Matcher 선언
+interface Matcher<T> {
+  funt test(value: T)
+}
+class startWith(val prefix: String): Matcher<String> {
+  override fun test(value: String) {
+    if (!value.startsWith(prefix)) {
+      throw AssertionError("String $value does not start with $prefix")
+    }
+  }
+}
+```
+
+코틀린테스트 DSL에서 메소드 호출 연쇄
+```
+"kotlin" should start with("kot")
+
+// 일반 메소드 호출로 변환
+"kotlin".should(start).with("kot")
+```
+
+중위 호출 연쇄를 지원하기 위한 API 정의
+```
+object start
+infix fun String.should(x: start): StartWrapper = StartWrapper(this)
+class StartWrapper(val value: String) {
+	infix fun with(prefix: String) = if (!value.startsWith(prefix)) {
+		throw AssertionError("String $value does not start with $prefix")
+	} else {
+		Unit
+	}
+}
+```
+
+원시 타입에 대한 확장 함수 정의: 날짜 처리
+```
+val Int.days: Period
+	get() = Period.ofDays(this) // this는 상수의 값을 가리킴
+
+val Period.ago: LocalDate
+	get() = LocalDate.now() - this
+
+val Period.fromNow: LocalDate
+	get() = LocalDate.now() + this
+
+println(1.days.ago)
+// 결과: 2020-04-18
+
+println(1.days.fromNow)
+// 결과: 2020-04-20
+```
+
+- Period 클래스는 두 날짜 사이의 시간 간격을 나타내는 JDK 8 타입이다.
+- 위에 쓰인 -, + 는 코틀린에서 제공하는 확장함수가 아닌 LocalData라는 JDK 클래스에 있는 관례에 의해 minus, plus 메소드가 호출되는 것이다.
+  - 코틀린의 -, + 연산자와 일치할 경우 호출해주는 관례가 들어있다.
