@@ -9,7 +9,7 @@ ex) SQL, 정규식
 
 - 모든 클래스는 마치 라이브러리처럼 다른 클래스에게 자신과 상호작용할 수 있는 가능성을 제공
 - DSL은 메소드 호출만을 제공하는 API에 비해 더 표현력이 풍부해지고 사용하기 편하다.
-
+- 코틀린DSL도 컴파일 시점에 타입이 정해지므로 오류 감지, IDE 지원 등 모든 정적 타입 지정 언어의 장점을 누릴 수 있다.
 
 #### 좋은 API란
 - 코드를 읽는 독자가 어떤일이 벌어질지 명확히 이해할 수 있어야 한다
@@ -28,10 +28,6 @@ ex) SQL, 정규식
     * 선언적인 특징을 가지고 있다.
         * 원하는 결과를 기술하기만 하고 그 결과를 위한 세부 실행은 언어를 해석하는 엔진에 맡김
     * 특정 영역에 특화되어 자체 문법이 있기 때문에 범용 언어로 만든 애플리케이션과 조합하기가 어렵다.
-        * ex) 내부 DB 사용 시 쿼리문 작성 <– 컴파일 시점에 검증 불가
-
-코틀린DSL도 컴파일 시점에 타입이 정해지므로 오류 감지, IDE 지원 등 모든 정적 타입 지정 언어의 장점을 누릴 수 있다.
-
 
 ## 내부 DSL
 
@@ -64,10 +60,10 @@ ORDER BY COUNT(Customer.id) DESC LIMIT 1
 ### DSL의 구조
 
 - DSL은 구조 또는 문법을 독립적으로 가진다.
-- 여러 함수 호출을 조합해서 연산을 만드는 것 또한 내부 DSL 적인 특징이다.
+- 여러 함수 호출을 조합해서 연산을 만드는 것 또한 내부 DSL적인 특징이다.
 
 ```
-gradle 에서 람다 중첩을 통해 구조를 만듦
+// gradle 에서 람다 중첩을 통해 구조를 만듦
 dependencies {
 	compile("junit:junit:4.11")
 	compile("com.google.inject:guice:4.1.0")
@@ -148,7 +144,7 @@ fun createAnotherTable() = createHTML().table {
 ```
 fun buildString(buiderAction: (StringBuilder) -> Unit): String {	// 함수 타입인 파라미터 정의
   val sb = StringBuilder()
-  builderAction(sb)
+  builderAction(sb)		// 람다 인자로 StringBuilder 인스턴스를 넘긴다
   return sb.toString()
 }
 
@@ -167,14 +163,15 @@ println(s)
 ```
 fun buildString(builderAction: StringBuilder.() -> Unit): String { // 수신 객체가 있는 함수 타입(확장 함수 타입)의 파라미터 선언
 	val sb = StringBuilder()
-	sb.builderAction() // 수신 객체로 넘김.
+	sb.builderAction()		// StringBuilder 인스턴스를 람다의 수신 객체로 넘긴다
 	return sb.toString()
 }
 
 val s = buildString {
-  this.append("Hello, ")
-  append("World!")	// this 생략가능
+	this.append("Hello, ")
+	append("World!")	// this 생략가능
 }
+
 println(s)
 
 >>>> Hello, World
