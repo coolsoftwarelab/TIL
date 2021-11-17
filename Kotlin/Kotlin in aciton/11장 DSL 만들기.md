@@ -148,7 +148,50 @@ fun createAnotherTable() = createHTML().table {
 - 코틀린 코드를 원하는대로 사용할 수 있다.
   - 맵에 들어있는 원소에 따라 동적으로 표의 칸을 생성할 수 있다.
 
-### 구조화된 API 구축 : DSL에서 
+### 구조화된 API 구축 : DSL에서 수신 객체 지정 DSL 사용
+
+#### 수신 객체 지정 람다와 확장 함수 타입
+
+람다를 인자로 받는 buildString() 정의
+```
+fun buildString(buiderAction: (StringBuilder) -> Unit): String {	// 함수 타입인 파라미터 정의
+  val sb = StringBuilder()
+  builderAction(sb)
+  return sb.toString()
+}
+
+val s = buildString { 	
+	it.append("Hello, ")	// it 은 Stringbuilder 인스턴스이다.
+	it.append("World!")
+}
+println(s)
+
+>>>> Hello, World!
+```
+`it`을 계속 사용해야 하므로 불편함
+
+수신 객체 지정 람다를 사용해 buildString() 정의  
+람다의 인자 중 하나에게 수신 객체라는 상태를 부여하면 이름과 마침표를 명시하지 않아도 그 인자의 멤버를 바로 사용할 수 있다.
+```
+fun buildString(builderAction: StringBuilder.() -> Unit): String { // 수신 객체가 있는 함수 타입(확장 함수 타입)의 파라미터 선언
+	val sb = StringBuilder()
+	sb.builderAction() // 수신 객체로 넘김.
+	return sb.toString()
+}
+
+val s = buildString {
+  this.append("Hello, ")
+  append("World!")	// this 생략가능
+}
+println(s)
+
+>>>> Hello, World
+```
+위 예제에서 일반 함수 타입 대신 확장 함수 타입 사용. `StringBuilder.() -> Unit`  
+`StringBulder`가 수신 객체 타입
+
+![](https://user-images.githubusercontent.com/4969393/142159511-a04e5ae5-9a74-482f-abf6-2ed56123ccc8.png)
+
 
 
 
