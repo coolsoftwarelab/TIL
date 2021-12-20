@@ -86,7 +86,7 @@ fun main(args: Array) {
 Hilt는 프로젝트의 모든 Android 클래스에 컨테이너를 제공하고 수명 주기를 자동으로 관리함으로써 애플리케이션에서 DI를 실행하는 표준 방법을 정의한다.  
 `Dagger` 기반으로 빌드됨
 
-
-
+이후 참조 예정
+https://developer.android.com/training/dependency-injection/manual?hl=ko
 
 
