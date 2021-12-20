@@ -46,9 +46,7 @@ fun main(args: Array) {
   - `FakeEngine`이라는 `Engine`의 테스트 더블을 생성하여 다양한 테스트에 맞게 구성할 수 있습니다.
 
 #### Android 에서 종속 항목 삽입 방법
-- ㄹ
-### Android 에서 종속 항목 삽입 방
-
+- 생성자 삽입, 필드삽입(또는 setter)
 
 
 
