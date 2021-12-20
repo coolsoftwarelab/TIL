@@ -1,4 +1,5 @@
-의존성 삽입을 (Depenence Injection)
+
+## 수동 종속 항목 삽입
 
 `Car클래스` 자체가 `Engine`을 구성하는 예제
 ````
@@ -47,6 +48,20 @@ fun main(args: Array) {
 
 #### Android 에서 종속 항목 삽입 방법
 - 생성자 삽입, 필드삽입(또는 setter)
+
+## 자동 종속 항목 삽입
+
+### 종속 항목 삽입의 대안
+
+#### 서비스 로케이터 패턴
+
+```
+object ServiceLocator {
+    fun getEngine(): Engine = Engine()
+}
+```
+
+
 
 
 
