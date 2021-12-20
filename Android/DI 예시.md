@@ -56,10 +56,35 @@ fun main(args: Array) {
 #### 서비스 로케이터 패턴
 
 ```
+class Engine {
+    fun start() { }
+}
+
 object ServiceLocator {
     fun getEngine(): Engine = Engine()
 }
+
+class Car {
+    private val engine = ServiceLocator.getEngine()
+
+    fun start() {
+        engine.start()
+    }
+}
+
+fun main(args: Array) {
+    val car = Car()
+    car.start()
+}
 ```
+#### 종속 항목 삽입과 비교
+- 코드를 테스트하기 더 어렵다. 모든 테스트가 동일한 전역 서비스 로케이터와 상호작용해야 하기 때문
+-  Car 또는 서비스 로케이터에서 사용 가능한 종속 항목을 변경하면 참조가 실패하여 런타임 오류 또는 테스트 실패가 발생할 수 있습니다.
+
+## Android Hilt
+>Hilt는 Android에서 종속 항목 삽입을 위한 Jetpack의 권장 라이브러리.  
+Hilt는 프로젝트의 모든 Android 클래스에 컨테이너를 제공하고 수명 주기를 자동으로 관리함으로써 애플리케이션에서 DI를 실행하는 표준 방법을 정의한다.  
+`Dagger` 기반으로 빌드됨
 
 
 
