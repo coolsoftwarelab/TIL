@@ -70,9 +70,6 @@ private val leScanCallback: ScanCallback = object : ScanCallback() {
 ```
 
 
-**참고 : Bluetooth LE 장치만 검색 하거나 클래식 Bluetooth 장치만 검색할 수 있습니다.**  
+참고 : Bluetooth LE 장치만 검색 하거나 클래식 Bluetooth 장치만 검색할 수 있습니다.
+
 **Bluetooth LE와 클래식 장치를 동시에 스캔할 수는 없습니다.**
-
-
-
-
