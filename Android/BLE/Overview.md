@@ -31,5 +31,48 @@
   - 전화는 중심 역할을 지원합니다, 활동 추적기는 주변 장치 역할을 지원  
   - **주변 장치만 지원하는 두 가지는 서로 통신할 수 없고 중앙만 지원하는 두 가지는 서로 통신할 수 없습니다.**
 
+## BLE 장치찾기
+
+`startScan()`으로 찾고 `ScanCallback` 을 이용해 결과를 콜백에서 처리
+
+```
+private val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
+private var scanning = false
+private val handler = Handler()
+
+// Stops scanning after 10 seconds.
+private val SCAN_PERIOD: Long = 10000
+
+private fun scanLeDevice() {
+    if (!scanning) { // Stops scanning after a pre-defined scan period.
+        handler.postDelayed({
+            scanning = false
+            bluetoothLeScanner.stopScan(leScanCallback)
+        }, SCAN_PERIOD)
+        scanning = true
+        bluetoothLeScanner.startScan(leScanCallback)
+    } else {
+        scanning = false
+        bluetoothLeScanner.stopScan(leScanCallback)
+    }
+}
+
+
+private val leDeviceListAdapter = LeDeviceListAdapter()
+// Device scan callback.
+private val leScanCallback: ScanCallback = object : ScanCallback() {
+    override fun onScanResult(callbackType: Int, result: ScanResult) {
+        super.onScanResult(callbackType, result)
+        leDeviceListAdapter.addDevice(result.device)
+        leDeviceListAdapter.notifyDataSetChanged()
+    }
+}
+```
+
+
+**참고 : Bluetooth LE 장치만 검색 하거나 클래식 Bluetooth 장치만 검색할 수 있습니다.**  
+**Bluetooth LE와 클래식 장치를 동시에 스캔할 수는 없습니다.**
+
+
 
 
