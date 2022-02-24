@@ -1,3 +1,5 @@
+참조 : https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server?hl=en
+
 ## BLE (Bleutooth Low Energy)
 
 - 주변 장치 간에 소량의 데이터 전송
@@ -73,3 +75,46 @@ private val leScanCallback: ScanCallback = object : ScanCallback() {
 참고 : Bluetooth LE 장치만 검색 하거나 클래식 Bluetooth 장치만 검색할 수 있습니다.
 
 **Bluetooth LE와 클래식 장치를 동시에 스캔할 수는 없습니다.**
+
+## GATT 서버에 연결
+- BLE 장치에서 GATT 서버에 연결하려면 `connectGatt()` 사용. 
+
+```
+var bluetoothGatt: BluetoothGatt? = null
+...
+
+bluetoothGatt = device.connectGatt(this, false, gattCallback)
+```
+BLE 장치가 호스팅하는 GATT 서버에 연결하고 `BluetoothGatt` 인스턴스를 반환하며, GATT 클라이언트 작업을 수행하는 데 사용할 수 있습니다.  
+호출자는 GATT 클라이언트입니다.  
+`BluetoothGattCallback` 연결 상태 및 추가 GATT 클라이언트 작업과 같은 결과를 클라이언트에 전달하는 데 사용됩니다.
+
+## 바인딩된 서비스 설정
+
+다음 예에서 BLE 앱은 Bluetooth 장치에 연결하고, 장치 데이터를 표시하고, 장치에서 지원하는 GATT 서비스 및 특성을 표시 하는 활동( )을 제공합니다.  
+사용자 입력에 따라 이 활동 은 BLE API를 통해 BLE 장치와 상호 작용 하는 Service호출 된 과 통신합니다.  
+BluetoothLeService통신은 활동이 장치에 연결하고 기능을 호출 할 수 있도록 하는 바인딩된 서비스 를 사용하여 수행됩니다. 
+
+```
+class BluetoothLeService : Service() {
+
+    private val binder = LocalBinder()
+
+    override fun onBind(intent: Intent): IBinder? {
+        return binder
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService() : BluetoothLeService {
+            return this@BluetoothLeService
+        }
+    }
+}
+```
+
+
+
+
+
+
+
