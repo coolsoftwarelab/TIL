@@ -37,7 +37,7 @@
 
 `startScan()`으로 찾고 `ScanCallback` 을 이용해 결과를 콜백에서 처리
 
-```
+```kotlin
 private val bluetoothLeScanner = bluetoothAdapter.bluetoothLeScanner
 private var scanning = false
 private val handler = Handler()
@@ -79,7 +79,7 @@ private val leScanCallback: ScanCallback = object : ScanCallback() {
 ## GATT 서버에 연결
 - BLE 장치에서 GATT 서버에 연결하려면 `connectGatt()` 사용. 
 
-```
+```kotlin
 var bluetoothGatt: BluetoothGatt? = null
 ...
 
@@ -91,11 +91,11 @@ BLE 장치가 호스팅하는 GATT 서버에 연결하고 `BluetoothGatt` 인스
 
 ## 바인딩된 서비스 설정
 
-다음 예에서 BLE 앱은 Bluetooth 장치에 연결하고, 장치 데이터를 표시하고, 장치에서 지원하는 GATT 서비스 및 특성을 표시 하는 활동( )을 제공합니다.  
+다음 예에서 BLE 앱은 Bluetooth 장치에 연결하고, 장치 데이터를 표시하고, 장치에서 지원하는 GATT 서비스 및 특성을 표시 하는 활동을 제공합니다.  
 사용자 입력에 따라 이 활동 은 BLE API를 통해 BLE 장치와 상호 작용 하는 Service호출 된 과 통신합니다.  
 BluetoothLeService통신은 활동이 장치에 연결하고 기능을 호출 할 수 있도록 하는 바인딩된 서비스 를 사용하여 수행됩니다. 
 
-```
+```kotlin
 class BluetoothLeService : Service() {
 
     private val binder = LocalBinder()
@@ -111,6 +111,46 @@ class BluetoothLeService : Service() {
     }
 }
 ```
+
+Activity는 서비스 시작 bindService()을 위한 전달, 연결 및 연결 해제 이벤트를 수신 Intent 구현,  
+추가 연결 옵션을 지정하는 플래그를 사용하여 서비스를 시작할 수 있습니다. `ServiceConnection`
+
+```kotlin
+class DeviceControlActivity : AppCompatActivity() {
+
+    private var bluetoothService : BluetoothLeService? = null
+
+    // Code to manage Service lifecycle.
+    private val serviceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(
+            componentName: ComponentName,
+            service: IBinder
+        ) {
+            bluetoothService = (service as LocalBinder).getService()
+            bluetoothService?.let { bluetooth ->
+                // call functions on service to check connection and connect to devices
+            }
+        }
+
+        override fun onServiceDisconnected(componentName: ComponentName) {
+            bluetoothService = null
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.gatt_services_characteristics)
+
+        val gattServiceIntent = Intent(this, BluetoothLeService::class.java)
+        bindService(gattServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+}
+```
+
+### BluetoothAdapter 설정
+
+서비스가 
+
 
 
 
