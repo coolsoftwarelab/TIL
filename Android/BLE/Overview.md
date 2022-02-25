@@ -89,7 +89,7 @@ BLE 장치가 호스팅하는 GATT 서버에 연결하고 `BluetoothGatt` 인스
 호출자는 GATT 클라이언트입니다.  
 `BluetoothGattCallback` 연결 상태 및 추가 GATT 클라이언트 작업과 같은 결과를 클라이언트에 전달하는 데 사용됩니다.
 
-## 바인딩된 서비스 설정
+### 바인딩된 서비스 설정
 
 다음 예에서 BLE 앱은 Bluetooth 장치에 연결하고, 장치 데이터를 표시하고, 장치에서 지원하는 GATT 서비스 및 특성을 표시 하는 활동을 제공합니다.  
 사용자 입력에 따라 이 활동 은 BLE API를 통해 BLE 장치와 상호 작용 하는 Service호출 된 과 통신합니다.  
@@ -149,10 +149,122 @@ class DeviceControlActivity : AppCompatActivity() {
 
 ### BluetoothAdapter 설정
 
-서비스가 
+서비스가 바인딩되면 `BluetoothAdapter` 에 액세스.
+```kotlin
+private const val TAG = "BluetoothLeService"
 
+class BluetoothLeService : Service() {
 
+    private var bluetoothAdapter: BluetoothAdapter? = null
 
+    fun initialize(): Boolean {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            Log.e(TAG, "Unable to obtain a BluetoothAdapter.")
+            return false
+        }
+        return true
+    }
+    ...
+}
+```
+
+Bluetooth 작동을 지원하지 않거나 오류 시 종료
+```kotlin
+    ...
+            bluetoothService = (service as LocalBinder).getService()
+            bluetoothService?.let { bluetooth ->
+                if (!bluetooth.initialize()) {
+                    Log.e(TAG, "Unable to initialize Bluetooth")
+                    finish()
+                }
+                // perform device connection
+            }
+    ...
+}
+```
+
+### 장치에 연결
+
+BluetoothService가 초기화되면 BLE 장치에 연결가능  
+서비스는 장치에 액세스를 위해 getRemoteDevice()
+```kotlin
+fun connect(address: String): Boolean {
+    bluetoothAdapter?.let { adapter ->
+        try {
+            val device = adapter.getRemoteDevice(address)
+        } catch (exception: IllegalArgumentException) {
+            Log.w(TAG, "Device not found with provided address.")
+            return false
+        }
+    // connect to the GATT server on the device
+    } ?: run {
+        Log.w(TAG, "BluetoothAdapter not initialized")
+        return false
+    }
+}
+```
+
+`connect()`에 BLE 장치의 주소를 전달해야 한다
+```kotlin
+    ...
+            // perform device connection
+            bluetooth.connect(deviceAddress)
+    ...
+```
+
+### GATT 콜백 선언
+
+액티비티가 서비스에 연결할 장치를 알려주고 서비스가 장치에 연결되면 서비스는 BLE 장치의 GATT 서버에 연결해야 한다.  
+`BluetoothGattCallback` 이 연결상태, 서비스 검색, 특성 읽기 및 알림에 대한 알림을 수신
+
+`onConnectionStateChanged()` 기능은 장치의 GATT 서비에 대한 연결이 변경될 때 트리거가 된다.
+
+```kotlin
+private val bluetoothGattCallback = object : BluetoothGattCallback() {
+    override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+        if (newState == BluetoothProfile.STATE_CONNECTED) {
+            // successfully connected to the GATT Server
+        } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            // disconnected from the GATT Server
+        }
+    }
+}
+```
+
+### GATT 서비스에 연결
+
+`BluetoothGattCalback` 이 선언되면 서비스는 `BluetoothDevice`의 `connect()를 이용해 장치의 GATT 서비스에 연결할 수 있다.
+
+`connectGatt() 기능 사용, 이렇게하면 서비스가 더 이상 필요하지 않을 때 연결을 닫을 수 있다
+
+```kotlin
+class BluetoothLeService : Service() {
+
+...
+
+    private var bluetoothGatt: BluetoothGatt? = null
+
+    ...
+
+    fun connect(address: String): Boolean {
+        bluetoothAdapter?.let { adapter ->
+            try {
+                val device = adapter.getRemoteDevice(address)
+                // connect to the GATT server on the device
+                bluetoothGatt = device.connectGatt(this, false, bluetoothGattCallback)
+                return true
+            } catch (exception: IllegalArgumentException) {
+                Log.w(TAG, "Device not found with provided address.  Unable to connect.")
+                return false
+            }
+        } ?: run {
+            Log.w(TAG, "BluetoothAdapter not initialized")
+            return false
+        }
+    }
+}
+```
 
 
 
