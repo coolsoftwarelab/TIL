@@ -276,6 +276,116 @@ private fun broadcastUpdate(action: String) {
 }
 ```
 
+```
+class BluetoothService : Service() {
+
+    private var connectionState = STATE_DISCONNECTED
+
+    private val bluetoothGattCallback: BluetoothGattCallback = object : BluetoothGattCallback() {
+        override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+            if (newState == BluetoothProfile.STATE_CONNECTED) {
+                // successfully connected to the GATT Server
+                connectionState = STATE_CONNECTED
+                broadcastUpdate(ACTION_GATT_CONNECTED)
+            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                // disconnected from the GATT Server
+                connectionState = STATE_DISCONNECTED
+                broadcastUpdate(ACTION_GATT_DISCONNECTED)
+            }
+        }
+    }
+
+    ...
+
+    companion object {
+        const val ACTION_GATT_CONNECTED =
+            "com.example.bluetooth.le.ACTION_GATT_CONNECTED"
+        const val ACTION_GATT_DISCONNECTED =
+            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED"
+
+        private const val STATE_DISCONNECTED = 0
+        private const val STATE_CONNECTED = 2
+
+    }
+}
+```
+### 활동 업데이트 듣기
+서비스의 이벤트를 수신하여 활동은 BLE 장치와의 현재 연결 상태를 기반으로 사용자 인터페이스를 업데이트할 수 
+
+있습니다.
+
+```kotlin
+class DeviceControlActivity : AppCompatActivity() {
+
+...
+
+    private val gattUpdateReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                BluetoothLeService.ACTION_GATT_CONNECTED -> {
+                    connected = true
+                    updateConnectionState(R.string.connected)
+                }
+                BluetoothLeService.ACTION_GATT_DISCONNECTED -> {
+                    connected = false
+                    updateConnectionState(R.string.disconnected)
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(gattUpdateReceiver, makeGattUpdateIntentFilter())
+        if (bluetoothService != null) {
+            val result = bluetoothService!!.connect(deviceAddress)
+            Log.d(DeviceControlsActivity.TAG, "Connect request result=$result")
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(gattUpdateReceiver)
+    }
+
+    private fun makeGattUpdateIntentFilter(): IntentFilter? {
+        return IntentFilter().apply {
+            addAction(BluetoothLeService.ACTION_GATT_CONNECTED)
+            addAction(BluetoothLeService.ACTION_GATT_DISCONNECTED)
+        }
+    }
+}
+```
+BLE 데이터 전송 에서 BroadcastReceiver서비스 검색과 장치의 특성 데이터를 전달하는 데에도 사용된다
+
+### GATT 연결 닫기
+
+```kotlin
+class BluetoothLeService : Service() {
+
+...
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        close()
+        return super.onUnbind(intent)
+    }
+
+    private fun close() {
+        bluetoothGatt?.let { gatt ->
+            gatt.close()
+            bluetoothGatt = null
+        }
+    }
+}
+```
+
+## BLE 데이터 전송
+
+BLE GATT 서버 에 연결 하면 연결을 사용하여 장치에서 사용 가능한 서비스를 찾고, 장치에서 데이터를 쿼리하고, 특정 GATT 특성이 변경될 때 알림을 요청할 수 있습니다.
+
+### 서비스 발견
+
+
 
 
 
