@@ -265,7 +265,16 @@ class BluetoothLeService : Service() {
     }
 }
 ```
+### 브로드캐스트 업데이트
+서버가 GATT 서버에 연결하거나 끊을 때 새 상태의 활동을 알려야 한다.  
+이 중 한가지 방법은 브로드캐스트로 서비스에 정보를 보낸다
 
+```kotlin
+private fun broadcastUpdate(action: String) {
+    val intent = Intent(action)
+    sendBroadcast(intent)
+}
+```
 
 
 
