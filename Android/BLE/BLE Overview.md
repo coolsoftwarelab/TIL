@@ -50,4 +50,7 @@
 
 - Profile : BLE 장치가 어떤 일을 하는 장치인지 나타내는 개념적 구분(심박 profile, 혈압 profile 등)
 - Service : 특정 기능과 과련이 있는 데이터 집합. 서비스끼리 구분하기 위해 각각 UUID 값을 가진다
-- Chracteristic : 
+- Chracteristic : 데이터를 담고 관리. Class와 비슷한 유형
+- Descriptor : 설명자는 사람이 읽을 수 있는 설명, 특성 값에 대해 허용되는 범위 또는 특성 값에 특정한 측정 단위를 지정할 수 있다.
+
+#### 스마트워치 프로필 예
