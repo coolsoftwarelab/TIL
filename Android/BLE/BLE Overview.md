@@ -46,11 +46,28 @@
 
 - GATT server 는 자신이 제공하는 서비스와 데이터를 아래와 같은 계층구조로 만들어서보관
 
-![](https://jung-max.github.io/images/Android-Bluetooth-low-energy/01.png)
+![](https://cdn-learn.adafruit.com/assets/assets/000/013/828/large1024/microcontrollers_GattStructure.png?1390836057)
 
 - Profile : BLE 장치가 어떤 일을 하는 장치인지 나타내는 개념적 구분(심박 profile, 혈압 profile 등)
 - Service : 특정 기능과 과련이 있는 데이터 집합. 서비스끼리 구분하기 위해 각각 UUID 값을 가진다
-- Chracteristic : 데이터를 담고 관리. Class와 비슷한 유형
+- Chracteristic : 데이터를 담고 관리. Class와 비슷한 유형. 특성은 단 하나의 데이터만을 포함합니다. 가속도 센서처럼 X, Y, Z 축 값이 한 쌍을 이루는 경우 일련된 값의 나열(배열)도 하나의 데이터로 간주
 - Descriptor : 설명자는 사람이 읽을 수 있는 설명, 특성 값에 대해 허용되는 범위 또는 특성 값에 특정한 측정 단위를 지정할 수 있다.
 
 #### 스마트워치 프로필 예
+
+```
+[스마트워치 Profile]
+  [위치확인 Service]
+      [좌표값 Chrarteristic]
+      [고도값 Chrarteristic]
+  [심박측정 Service]
+      [심박값 Chrarteristic]
+      [평균심박값 Chrarteristic]
+```
+
+#### 스마트폰에서 연결 예시
+- 먼저 폰은 주변의 BLE 장치를 스캔합니다. (GAP profile 이 정의하는 것이 이 과정. 주기적으로 advertising 이 되는 데이터가 어떻게 이루어져 있는지를 정의)
+- 폰은 스캔 결과에서 원하는 peripheral(센서장치)가 보이면 연결 (두 장치가 연결되면 센서장치는 advertising을 종료, Central(폰)은 GATT client 역할을 하고 GATT server에 연결하는 것)
+- 이제 이후부터는 안드로이드, iOS 프레임웍에서 GATT client를 운영하고 데이터 수신, 연결 상태의 변화 등 각종 이벤트가 발생 할 때 앱에 알려주게됩니다. (이 과정을 운용하기 위해 필요한 내용들이 GATT/ATT에 정의됨)
+- 먼저 연결된 장치의 GATT 정보와 Service  정보를 수신 (Service UUID 정보로 확인)
+- Characteristic 정보 수신 (UUID 값으로 실제 처리할 데이터를 추출)
