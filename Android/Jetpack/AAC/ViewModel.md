@@ -16,6 +16,8 @@
 - 일반적인 객체 생성(new 키워드)대신 ViewModelProvider를 통해 객체를 생성하고 관리한다.
 - ViewModel에 액티비티, 프래그먼트, 뷰에 대한 컨텍스트를 저장하면 안된다. (메모리 릭)
 
+#### 예제 코드는 LiveData 파트에 작성해놓음
+
 #### 참조
 https://developer.android.com/topic/libraries/architecture/viewmodel#java
 
