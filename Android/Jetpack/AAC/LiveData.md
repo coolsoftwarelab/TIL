@@ -7,3 +7,44 @@ RxJava의 Observable 과 비슷한 듯
 
 
 참조 : https://developer.android.com/topic/libraries/architecture/livedata?hl=ko
+
+Activity
+```kotlin
+class LiveDataTestActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
+    private val model: MyViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        binding.tvNum.text = "init"
+
+        model.getCount().observe(this, Observer {
+            binding.tvNum.text = it.toString()
+        })
+
+        binding.btnInc.setOnClickListener {
+            model.increase()
+        }
+    }
+}
+```
+
+ViewModel + LiveData
+```kotlin
+class MyViewModel: ViewModel() {
+    private var count = MutableLiveData<Int>()
+
+    init {
+        count.value = 1
+    }
+    fun getCount(): LiveData<Int> {
+        return count
+    }
+
+    fun increase() {
+        count.value = count.value?.plus(1)
+    }
+}
+```
