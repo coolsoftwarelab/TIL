@@ -65,6 +65,38 @@
       [평균심박값 Chrarteristic]
 ```
 
+#### Characteristic Read/Write/Notification
+
+- 서버의 값 변경을 클라이언트에서 즉시 수신하려면 `Characteristic` 에 Notification 속성을 설정하고
+`Characteristic descriptor` 에 Notification on 값을 설정해야 한다
+```java
+// Characteristic
+new BluetoothGattCharacteristic
+(
+      MyService.getUuid(),
+      BluetoothGattCharacteristic.PROPERTY_READ
+              | BluetoothGattCharacteristic.PROPERTY_WRITE
+              | BluetoothGattCharacteristic.PROPERTY_NOTIFY,  // Notify
+      BluetoothGattCharacteristic.PERMISSION_READ 
+            | BluetoothGattCharacteristic.PERMISSION_WRITE
+);
+
+// Characteristic user descriptor (0x2902)
+new BluetoothGattDescriptor(MY_CLIENT_CHARACTERISTIC_CONFIGURATION.getUuid(),
+ BluetoothGattDescriptor.PERMISSION_READ | BluetoothGattDescriptor.PERMISSION_WRITE);
+
+descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+
+myCharacteristic.addDescriptor(descriptor);
+```
+- 서버는 클라이언트로부터 Read/Write 요청이 왔을 때 이에 대한 응답을 해야한다
+  ```java
+  // onCharacteristicReadRequest(...)
+  mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, characteristic.getValue());  
+  ```
+  
+
+
 #### 스마트폰에서 연결 예시
 - 먼저 폰은 주변의 BLE 장치를 스캔합니다. (GAP profile 이 정의하는 것이 이 과정. 주기적으로 advertising 이 되는 데이터가 어떻게 이루어져 있는지를 정의)
 - 폰은 스캔 결과에서 원하는 peripheral(센서장치)가 보이면 연결 (두 장치가 연결되면 센서장치는 advertising을 종료, Central(폰)은 GATT client 역할을 하고 GATT server에 연결하는 것)
