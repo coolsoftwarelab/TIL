@@ -67,8 +67,8 @@
 
 #### Characteristic Read/Write/Notification
 
-- 서버의 값 변경을 클라이언트에서 즉시 수신하려면 `Characteristic` 에 Notification 속성을 설정하고
-`Characteristic descriptor` 에 Notification on 값을 설정해야 한다
+- 서버 센서 값 변경을 클라이언트에서 즉시 수신하려면 `Characteristic` 에 Notification 속성을 설정하고
+`Characteristic descriptor` 에 Notification enalbe 값을 설정해야 한다
 ```java
 // Characteristic
 new BluetoothGattCharacteristic
@@ -85,16 +85,18 @@ new BluetoothGattCharacteristic
 new BluetoothGattDescriptor(MY_CLIENT_CHARACTERISTIC_CONFIGURATION.getUuid(),
  BluetoothGattDescriptor.PERMISSION_READ | BluetoothGattDescriptor.PERMISSION_WRITE);
 
-descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);  // Notification enable
 
 myCharacteristic.addDescriptor(descriptor);
 ```
 - 서버는 클라이언트로부터 Read/Write 요청이 왔을 때 이에 대한 응답을 해야한다
   ```java
-  // onCharacteristicReadRequest(...)
-  mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, characteristic.getValue());  
+  onCharacteristicReadRequest(...) {
+      ...
+      mGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, characteristic.getValue());
+  }
   ```
-  
+  - 다만 `Characteristic` 속성이 `PROPERTY_WRITE_NO_RESPONSE` 라면 응답을 안해도 된다
 
 
 #### 스마트폰에서 연결 예시
